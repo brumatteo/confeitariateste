@@ -16,12 +16,20 @@ async function killSWAndCaches() {
 async function loadJSON(name) {
   const bust = (window.__BUILD_ID__ || Date.now());
   const url = `content/${name}.json?v=${bust}`;
+  console.info('[CMS] carregando:', url);
   try {
-    const response = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
-    if (!response.ok) throw new Error(`Não foi possível carregar ${name}`);
-    return await response.json();
+    const res = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status} ao carregar ${name}`);
+    const ct = (res.headers.get('content-type') || '').toLowerCase();
+    if (!ct.includes('application/json')) {
+      const txt = await res.text();
+      throw new Error(`Resposta não-JSON para ${name}.json (content-type: ${ct}). Trecho: ${txt.slice(0,120)}`);
+    }
+    const data = await res.json();
+    console.info(`[CMS] ${name}.json OK`, data);
+    return data;
   } catch (e) {
-    console.warn(`Falha ao carregar ${name}.json, usando dados padrão se disponíveis.`, e);
+    console.error(`[CMS] Falha ao carregar ${name}.json`, e);
     if (window.defaultContent && window.defaultContent[name]) return window.defaultContent[name];
     return null;
   }
@@ -61,25 +69,40 @@ function applyTheme(theme) {
     cta.href = t.headerCta.href || '#';
   }
 
-  if (t.button) {
-    const forceBtnStyles = () => {
-      document.querySelectorAll('.header-cta, .product-cta').forEach(el => {
-        el.style.background = `var(--button)`;
-        el.style.borderColor = `var(--button)`;
-        el.style.color = '#fff';
-      });
-      document.querySelectorAll('.size-button.active, .category-button.active').forEach(el => {
-        el.style.background = `var(--button)`;
-        el.style.borderColor = `var(--button)`;
-        el.style.color = '#fff';
-      });
-      document.querySelectorAll('.size-button, .category-button').forEach(el => {
-        el.style.borderColor = `var(--button)`;
-      });
-    };
-    forceBtnStyles();
-    setTimeout(forceBtnStyles, 0);
-  }
+  const forceBtnStyles = () => {
+    document.querySelectorAll('.header-cta, .product-cta').forEach(el => {
+      el.style.background = 'var(--button)';
+      el.style.borderColor = 'var(--button)';
+      el.style.color = '#fff';
+    });
+    document.querySelectorAll('.size-button.active, .category-button.active').forEach(el => {
+      el.style.background = 'var(--button)';
+      el.style.borderColor = 'var(--button)';
+      el.style.color = '#fff';
+    });
+    document.querySelectorAll('.size-button, .category-button').forEach(el => {
+      el.style.borderColor = 'var(--button)';
+    });
+  };
+  forceBtnStyles();
+  setTimeout(forceBtnStyles, 0);
+
+  // Observa o DOM para aplicar cor quando novos botões/cartões aparecem
+  const mo = new MutationObserver(() => forceBtnStyles());
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  // helper pra console
+  window.debugTheme = () => ({
+    cssVars: {
+      primary: getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(),
+      secondary: getComputedStyle(document.documentElement).getPropertyValue('--secondary').trim(),
+      bg: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(),
+      card: getComputedStyle(document.documentElement).getPropertyValue('--card').trim(),
+      text: getComputedStyle(document.documentElement).getPropertyValue('--text').trim(),
+      button: getComputedStyle(document.documentElement).getPropertyValue('--button').trim(),
+    },
+    headerBtn: getComputedStyle(document.querySelector('.header-cta'))?.backgroundColor
+  });
 }
 
 function buildHero(data) {
