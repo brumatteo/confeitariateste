@@ -5,6 +5,11 @@
   <title>Painel de Administração</title>
   <meta name="robots" content="noindex, nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Evita cache do painel (às vezes o navegador mantém config antigo) -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 </head>
 <body>
   <!-- Netlify Identity (login) -->
@@ -26,12 +31,21 @@
   <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@3.0.0/dist/decap-cms.js"></script>
 
-  <!-- Opções extras: idioma e pequenos ajustes -->
+  <!-- Idioma e pequenos ajustes -->
   <script>
-    // força interface do CMS para PT-BR (quando disponível)
-    if (window.CMS && CMS.registerLocale) {
-      CMS.registerLocale('pt');
-    }
+    // força interface do CMS para PT-BR quando o CMS estiver disponível
+    (function ensurePtLocale() {
+      if (window.CMS && CMS.registerLocale) {
+        try { CMS.registerLocale('pt'); } catch(e) {}
+      } else {
+        // tenta novamente logo após carregar
+        document.addEventListener('DOMContentLoaded', function () {
+          if (window.CMS && CMS.registerLocale) {
+            try { CMS.registerLocale('pt'); } catch(e) {}
+          }
+        });
+      }
+    })();
   </script>
 </body>
 </html>
