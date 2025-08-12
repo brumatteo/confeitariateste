@@ -19,7 +19,10 @@
   --text:#5a4b42;
   --button:#d99a9a;
 }
+
+/* Agora inclui .hero-cta */
 .header-cta,
+.hero-cta,
 .product-cta,
 .size-button.active,
 .category-button.active {
@@ -27,11 +30,15 @@
   border-color: var(--button) !important;
   color: #fff !important;
 }
+
+/* Bordas/estados inativos seguem a cor do botão */
 .size-button,
 .category-button {
   border-color: var(--button) !important;
 }
+
 .header-cta:hover,
+.hero-cta:hover,
 .product-cta:hover {
   filter: brightness(0.95);
 }
