@@ -166,33 +166,28 @@ collections:
                 name: text
                 widget: text
 
-  # -------------------- CATEGORIAS --------------------
-  - name: categories
-    label: "Categorias (filtros)"
-    files:
-      - file: "content/categories.json"
-        name: categories
-        label: "Categorias"
-        format: json
-        fields:
-          - label: "Itens"
-            name: items
-            widget: list
-            fields:
-              - label: "Nome visível"
-                name: name
-                widget: string
-              - label: "Slug (sem espaço, minúsculo)"
-                name: slug
-                widget: string
-                hint: "Ex.: especiais, tradicionais"
-              - label: "Ordem (opcional)"
-                name: order
-                widget: number
-                required: false
-            default:
-              - { name: "Especiais", slug: "especiais", order: 1 }
-              - { name: "Tradicionais", slug: "tradicionais", order: 2 }
+# -------------------- CATEGORIAS --------------------
+- name: categories
+  label: "Categorias (filtros)"
+  files:
+    - file: "content/categories.json"
+      name: categories
+      label: "Categorias"
+      format: json
+      fields:
+        - label: "Itens"
+          name: items
+          widget: list
+          collapsed: false
+          summary: "{{fields.item}}"          # mostra o nome na linha
+          field:
+            label: "Nome da categoria"
+            name: item
+            widget: string
+          default:
+            - Especiais
+            - Tradicionais
+
 
   # -------------------- PRODUTOS --------------------
   - name: products
