@@ -1,0 +1,171 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+locale: "pt"
+
+collections:
+  - name: theme
+    label: "Tema"
+    delete: false
+    files:
+      - file: "content/theme.json"
+        name: theme
+        label: "Configurações do Tema"
+        format: json
+        fields:
+          - { label: "Cor primária", name: primaryColor, widget: color, allowInput: true }
+          - { label: "Cor secundária", name: secondaryColor, widget: color, allowInput: true, required: false }
+          - { label: "Cor de fundo", name: backgroundColor, widget: color, allowInput: true, required: false }
+          - { label: "Cor do texto", name: textColor, widget: color, allowInput: true, required: false }
+          - { label: "Cor dos botões", name: buttonColor, widget: color, allowInput: true, required: false }
+          - { label: "WhatsApp (com DDI)", name: whatsapp, widget: string, required: false }
+          - { label: "Mensagem do WhatsApp", name: whatsappMessage, widget: string, required: false }
+          - { label: "Mostrar seção Sobre", name: showAbout, widget: boolean, default: true }
+
+  - name: hero
+    label: "Hero"
+    delete: false
+    files:
+      - file: "content/hero.json"
+        name: hero
+        label: "Seção Hero"
+        format: json
+        fields:
+          - { label: "Título", name: title, widget: string }
+          - { label: "Subtítulo", name: subtitle, widget: text, required: false }
+          - { label: "Imagem", name: image, widget: image, required: false }
+          - { label: "Opacidade do overlay", name: overlayOpacity, widget: number, min: 0, max: 1, step: 0.05, required: false }
+          - { label: "Texto do botão", name: ctaText, widget: string, required: false }
+          - { label: "Link do botão", name: ctaLink, widget: string, required: false }
+
+  - name: about
+    label: "Sobre"
+    delete: false
+    files:
+      - file: "content/about.json"
+        name: about
+        label: "Seção Sobre"
+        format: json
+        fields:
+          - { label: "Título", name: title, widget: string }
+          - { label: "Texto", name: text, widget: text }
+          - { label: "Imagem", name: image, widget: image, required: false }
+          - label: "Características"
+            name: features
+            widget: list
+            allow_add: true
+            fields:
+              - { label: "Ícone", name: icon, widget: image, required: false }
+              - { label: "Título", name: title, widget: string }
+              - { label: "Texto", name: text, widget: text }
+
+  - name: categories
+    label: "Categorias"
+    files:
+      - file: "content/categories.json"
+        name: categories
+        label: "Categorias"
+        format: json
+        fields:
+          - label: "Itens"
+            name: items
+            widget: list
+            fields:
+              - { label: "Nome", name: name, widget: string }
+              - { label: "Slug", name: slug, widget: string }
+              - { label: "Ordem", name: order, widget: number, required: false }
+
+  - name: products
+    label: "Produtos"
+    files:
+      - file: "content/products.json"
+        name: products
+        label: "Produtos"
+        format: json
+        fields:
+          - label: "Itens"
+            name: items
+            widget: list
+            allow_add: true
+            fields:
+              - { label: "Ativo", name: active, widget: boolean, default: true }
+              - { label: "Nome", name: name, widget: string }
+              - { label: "Descrição", name: description, widget: text, required: false }
+              - { label: "Categoria (slug)", name: category, widget: string, required: false }
+              - { label: "Preço", name: price, widget: string, required: false }
+              - { label: "Imagem", name: image, widget: image, required: false }
+              - label: "Tamanhos"
+                name: sizes
+                widget: list
+                required: false
+                fields:
+                  - { label: "Nome", name: label, widget: string }
+                  - { label: "Preço", name: price, widget: string, required: false }
+              - { label: "Badge", name: badge, widget: select, required: false, options: ["Novo", "Mais vendido", "Promoção"] }
+              - { label: "Ordem", name: order, widget: number, required: false }
+
+  - name: decorations
+    label: "Decorações"
+    files:
+      - file: "content/decorations.json"
+        name: decorations
+        label: "Decorações"
+        format: json
+        fields:
+          - label: "Itens"
+            name: items
+            widget: list
+            fields:
+              - { label: "Nome", name: name, widget: string }
+              - { label: "Imagem", name: image, widget: image, required: false }
+
+  - name: gallery
+    label: "Galeria"
+    files:
+      - file: "content/gallery.json"
+        name: gallery
+        label: "Galeria"
+        format: json
+        fields:
+          - label: "Imagens"
+            name: images
+            widget: list
+            field:
+              label: "Imagem"
+              name: image
+              widget: image
+
+  - name: policies
+    label: "Informações/Políticas"
+    files:
+      - file: "content/policies.json"
+        name: policies
+        label: "Informações/Políticas"
+        format: json
+        fields:
+          - { label: "Título", name: title, widget: string }
+          - label: "Itens"
+            name: items
+            widget: list
+            fields:
+              - { label: "Título", name: title, widget: string }
+              - { label: "Texto", name: text, widget: text }
+              - { label: "Ícone", name: icon, widget: image, required: false }
+
+  - name: faq
+    label: "FAQ"
+    files:
+      - file: "content/faq.json"
+        name: faq
+        label: "FAQ"
+        format: json
+        fields:
+          - label: "Perguntas"
+            name: items
+            widget: list
+            fields:
+              - { label: "Pergunta", name: question, widget: string }
+              - { label: "Resposta", name: answer, widget: text }

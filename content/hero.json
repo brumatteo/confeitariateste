@@ -1,0 +1,11 @@
+{
+  "title": "Sua Celebração, Nossa Assinatura",
+  "subtitle": "Bolos decorados sob medida para momentos que merecem ser lembrados.",
+  "image": "images/hero.jpg",
+  "overlay": "linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2))",
+  "opacity": 0.6,
+  "cta": {
+    "label": "Ver Cardápio",
+    "href": "#menu"
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cardápio Bolo à Vista</title>
+  <meta name="description" content="Cardápio de bolos decorados, feitos sob medida e personalizados.">
+  <!-- Google Fonts -->
+  <!-- Use Fraunces for elegant headlines and Inter for body text -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600;1,9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header id="header">
+    <nav class="nav-bar">
+      <div class="brand-text" id="brandText">Bolo à Vista</div>
+      <a class="header-cta" id="headerCta" href="#" aria-label="Fazer pedido no WhatsApp">WhatsApp</a>
+    </nav>
+  </header>
+  <!-- Main content will be injected via JS -->
+  <main id="main"></main>
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <p id="footerText"></p>
+    </div>
+  </footer>
+  <!-- Scripts -->
+  <!-- Default content for offline preview. When the site is deployed the CMS JSON will override these values. -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <!-- Netlify Identity Script -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    // Só abre o popup se a URL tiver token do e-mail (convite/recuperação)
+    const hasToken = /token=|confirmation_token=|recovery_token=|invite_token=/.test(location.href);
+
+    window.netlifyIdentity.on('init', function () {
+      if (hasToken) {
+        window.netlifyIdentity.open(); // abre o modal só nesses casos
+      }
+    });
+
+    // Depois de concluir (login/signup/reset), manda pro painel
+    ['login','signup','passwordRecovery'].forEach(function (evt) {
+      window.netlifyIdentity.on(evt, function () {
+        location.href = '/admin/';
+      });
+    });
+  }
+</script>
+  
+</body>
+</html>

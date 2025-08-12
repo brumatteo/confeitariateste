@@ -1,0 +1,43 @@
+{
+  "introTitle": "Informações Importantes",
+  "introText": "Confira abaixo informações importantes sobre pedidos, decorações, pagamentos e cancelamentos.",
+  "items": [
+    {
+      "title": "Pedidos",
+      "items": [
+        "Faça seu pedido com mínimo de 5 dias de antecedência.",
+        "Para datas com alta demanda, antecipe o quanto antes.",
+        "Após o início da produção, não serão aceitas alterações.",
+        "Ajustes devem ser feitos até 5 dias antes e podem ter custo extra."
+      ]
+    },
+    {
+      "title": "Decoração",
+      "items": [
+        "Você pode enviar referências, mas não copiamos bolos.",
+        "As imagens servem de inspiração para uma criação única.",
+        "Cores podem variar levemente.",
+        "Não trabalhamos com cobertura total em pasta americana, apenas detalhes decorativos."
+      ]
+    },
+    {
+      "title": "Pagamento e Retirada",
+      "items": [
+        "Aceitamos pix ou dinheiro.",
+        "Pagamento em duas partes: 50% no pedido e 50% na retirada.",
+        "O pedido só é confirmado após o pagamento da entrada.",
+        "Retirada no ateliê em horário agendado.",
+        "Domingo não abrimos.",
+        "Entregas com taxa adicional, consultar disponibilidade."
+      ]
+    },
+    {
+      "title": "Política de Cancelamento",
+      "items": [
+        "Cancelamentos até 5 dias úteis antes: reembolso de 50%.",
+        "Após esse prazo: sem reembolso.",
+        "O valor pode ser usado como crédito para outro pedido."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "active": true,
+      "name": "Velvet Cream",
+      "price": "R$ 250,00",
+      "description": "Massa red velvet com três camadas de brigadeiro cremoso de cream cheese.",
+      "category": "Especiais",
+      "categoryDescription": "Sabores finos, marcantes e únicos",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 250,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 300,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 380,00" }
+      ],
+      "tags": [
+        "red velvet",
+        "cream cheese"
+      ],
+      "serves": "20 fatias",
+      "image": "images/gallery1.png",
+      "bestseller": true,
+      "new": false,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    },
+    {
+      "active": true,
+      "name": "Morango dos Sonhos",
+      "price": "R$ 260,00",
+      "description": "Massa de baunilha com três camadas de brigadeiro 4 leites com geleia de morango artesanal.",
+      "category": "Especiais",
+      "categoryDescription": "Sabores finos, marcantes e únicos",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 250,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 300,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 380,00" }
+      ],
+      "tags": [
+        "baunilha",
+        "morango"
+      ],
+      "serves": "25 fatias",
+      "image": "images/gallery2.png",
+      "bestseller": false,
+      "new": true,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    },
+    {
+      "active": true,
+      "name": "Pistache & Morango",
+      "price": "R$ 300,00",
+      "description": "Massa de pistache com duas camadas de brigadeiro branco com geleia de morango e uma camada central de creme de pistache.",
+      "category": "Especiais",
+      "categoryDescription": "Sabores finos, marcantes e únicos",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 250,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 300,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 380,00" }
+      ],
+      "tags": [
+        "pistache",
+        "morango"
+      ],
+      "serves": "25 fatias",
+      "image": "images/gallery3.png",
+      "bestseller": false,
+      "new": false,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    },
+    {
+      "active": true,
+      "name": "Dulce Limão",
+      "price": "R$ 380,00",
+      "description": "Massa de limão com três camadas de brigadeiro de doce de leite cremoso e curd de limão siciliano artesanal.",
+      "category": "Especiais",
+      "categoryDescription": "Sabores finos, marcantes e únicos",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 250,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 300,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 380,00" }
+      ],
+      "tags": [
+        "limão",
+        "doce de leite"
+      ],
+      "serves": "35 fatias",
+      "image": "images/gallery1.png",
+      "bestseller": false,
+      "new": false,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    },
+    {
+      "active": true,
+      "name": "Clássico Duplo",
+      "price": "R$ 210,00",
+      "description": "Massa de baunilha com duas camadas de brigadeiro de chocolate e uma camada de brigadeiro branco.",
+      "category": "Tradicionais",
+      "categoryDescription": "Perfeitos para qualquer ocasião.",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 210,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 260,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 350,00" }
+      ],
+      "tags": [
+        "baunilha",
+        "chocolate"
+      ],
+      "serves": "20 fatias",
+      "image": "images/gallery2.png",
+      "bestseller": false,
+      "new": false,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    },
+    {
+      "active": true,
+      "name": "Prestígio Artesanal",
+      "price": "R$ 260,00",
+      "description": "Massa de chocolate com duas camadas de brigadeiro de coco e uma camada de brigadeiro de chocolate trufado cremoso.",
+      "category": "Tradicionais",
+      "categoryDescription": "Perfeitos para qualquer ocasião.",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 210,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 260,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 350,00" }
+      ],
+      "tags": [
+        "coco",
+        "chocolate"
+      ],
+      "serves": "25 fatias",
+      "image": "images/gallery3.png",
+      "bestseller": true,
+      "new": false,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    },
+    {
+      "active": true,
+      "name": "Clássico Chocolate",
+      "price": "R$ 350,00",
+      "description": "Massa de chocolate com três camadas de brigadeiro de chocolate trufado cremoso.",
+      "category": "Tradicionais",
+      "categoryDescription": "Perfeitos para qualquer ocasião.",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 210,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 260,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 350,00" }
+      ],
+      "tags": [
+        "chocolate"
+      ],
+      "serves": "35 fatias",
+      "image": "images/gallery1.png",
+      "bestseller": false,
+      "new": false,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    },
+    {
+      "active": true,
+      "name": "Latte (Ninho & Nutella)",
+      "price": "R$ 260,00",
+      "description": "Massa de café suave com três camadas de brigadeiro de ninho Nutella.",
+      "category": "Tradicionais",
+      "categoryDescription": "Perfeitos para qualquer ocasião.",
+      "sizeTable": [
+        { "size": "P 15cm", "serves": "20 fatias", "price": "R$ 210,00" },
+        { "size": "M 17cm", "serves": "25 fatias", "price": "R$ 260,00" },
+        { "size": "G 20cm", "serves": "35 fatias", "price": "R$ 350,00" }
+      ],
+      "tags": [
+        "café",
+        "ninho",
+        "nutella"
+      ],
+      "serves": "25 fatias",
+      "image": "images/gallery2.png",
+      "bestseller": false,
+      "new": true,
+      "cta": {
+        "label": "Escolher decoração",
+        "href": "#decorations"
+      }
+    }
+  ]
+}

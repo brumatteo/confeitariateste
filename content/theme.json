@@ -1,0 +1,23 @@
+{
+  "brandText": "Vanilla Cake Studio",
+  "primary": "#d9a5a0",
+  "secondary": "#7a5c4b",
+  "bg": "#f8f6f3",
+  "card": "#ffffff",
+  "text": "#5a4b42",
+  "headerCta": {
+    "label": "Pedir no WhatsApp",
+    "href": "https://wa.me/xx?text=Ol%C3%A1%20quero%20fazer%20um%20pedido"
+  },
+  "sectionsOrder": ["hero", "about", "menu", "decorations", "custom", "policies", "faq"],
+  "sectionsEnabled": {
+    "hero": true,
+    "about": true,
+    "menu": true,
+    "decorations": true,
+    "gallery": true,
+    "custom": true,
+    "policies": true,
+    "faq": true
+  }
+}

@@ -1,0 +1,16 @@
+[build]
+  # Não há etapa de build, pois o projeto é 100% estático
+  command = "echo 'Static build'"
+  publish = "/"
+
+# Redireciona todas as rotas para index.html para suportar navegação
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cabeçalhos de segurança para o painel
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "DENY"

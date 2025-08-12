@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Painel de Administração</title>
+  <meta name="robots" content="noindex">
+</head>
+<body>
+  <!-- 1) Widget de login do Netlify -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- 2) Redireciona para /admin após login -->
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", (user) => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+
+  <!-- Painel do Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@3.0.0/dist/decap-cms.js"></script>
+</body>
+</html>
