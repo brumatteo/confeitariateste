@@ -67,9 +67,16 @@ function buildHero(data) {
   const overlay = document.createElement('div');
   overlay.className = 'overlay';
   // Define gradiente e opacidade conforme JSON
-  overlay.style.background = data.overlay || 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
-  overlay.style.opacity = data.opacity != null ? data.opacity : 0.5;
-  section.appendChild(overlay);
+// Overlay
+const overlay = document.createElement('div');
+overlay.className = 'overlay';
+
+// Definir gradiente e opacidade conforme JSON (opacidade agora vem em %)
+overlay.style.background = data.overlay || 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
+const op = (typeof data.opacity === 'number') ? data.opacity : 60; // 60%
+overlay.style.opacity = Math.max(0, Math.min(1, op / 100));
+
+section.appendChild(overlay);
 
   const container = document.createElement('div');
   container.className = 'hero-content';
