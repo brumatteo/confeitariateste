@@ -1,4 +1,3 @@
-<script>
 /*
  * Script principal responsável por carregar o conteúdo em JSON, aplicar o tema
  * e construir as seções do site dinamicamente. O objetivo é que todo o
@@ -7,7 +6,7 @@
 
 // Função utilitária para carregar arquivos JSON do diretório /content
 async function loadJSON(name) {
-  const bust = (window.__BUILD_ID__ || Date.now());
+  const bust = (window.__BUILD_ID__ || Date.now()); // evita cache
   const url = `content/${name}.json?v=${bust}`;
   try {
     const response = await fetch(url, {
@@ -36,16 +35,18 @@ function debounce(func, delay) {
   };
 }
 
-// Aplica as cores e textos definidos no tema
+// Aplica as cores e textos definidos no tema (mapeando chaves novas/antigas)
 function applyTheme(theme) {
   const t = { ...theme };
-  if (t.primaryColor && !t.primary) t.primary = t.primaryColor;
+  // Mapas de compatibilidade
+  if (t.primaryColor  && !t.primary) t.primary = t.primaryColor;
   if (t.secondaryColor && !t.secondary) t.secondary = t.secondaryColor;
   if (t.backgroundColor && !t.bg) t.bg = t.backgroundColor;
   if (t.textColor && !t.text) t.text = t.textColor;
   if (t.cardColor && !t.card) t.card = t.cardColor;
-  if (t.card === undefined && t.cardColor === undefined && t.card === undefined && theme.card) t.card = theme.card;
+  if (!t.card && theme.card) t.card = theme.card;
 
+  // CSS vars
   const root = document.documentElement;
   if (t.primary) root.style.setProperty('--primary', t.primary);
   if (t.secondary) root.style.setProperty('--secondary', t.secondary);
@@ -53,6 +54,7 @@ function applyTheme(theme) {
   if (t.card) root.style.setProperty('--card', t.card);
   if (t.text) root.style.setProperty('--text', t.text);
 
+  // Conteúdos de header opcionais
   const brand = document.getElementById('brandText');
   const cta = document.getElementById('headerCta');
   if (brand && t.brandText) brand.textContent = t.brandText;
@@ -86,7 +88,7 @@ function buildHero(data) {
     ? data.overlayOpacity
     : (typeof data?.opacity === 'number')
       ? data.opacity
-      : 60;
+      : 60; // valor padrão em %
 
   overlay.style.opacity = Math.max(0, Math.min(1, raw / 100));
   section.appendChild(overlay);
@@ -165,7 +167,7 @@ function buildAbout(data) {
       const ftTitle = document.createElement('h3');
       ftTitle.textContent = item.title || '';
       const ftText = document.createElement('p');
-        ftText.textContent = item.text || '';
+      ftText.textContent = item.text || '';
       itemEl.appendChild(ftTitle);
       itemEl.appendChild(ftText);
       featuresWrapper.appendChild(itemEl);
@@ -188,6 +190,8 @@ function buildMenu(categories, products) {
   subtitle.className = 'menu-subtitle';
   subtitle.textContent = 'Defina o sabor e o tamanho';
   section.appendChild(subtitle);
+
+  // Seletor de tamanho
   const sizeSelector = document.createElement('div');
   sizeSelector.className = 'size-selector';
   const sizeLabel = document.createElement('span');
@@ -203,6 +207,8 @@ function buildMenu(categories, products) {
     sizeSelector.appendChild(btn);
   });
   section.appendChild(sizeSelector);
+
+  // Busca
   const searchContainer = document.createElement('div');
   searchContainer.className = 'search-container';
   const searchInput = document.createElement('input');
@@ -212,6 +218,8 @@ function buildMenu(categories, products) {
   searchInput.setAttribute('aria-label', 'Buscar produto');
   searchContainer.appendChild(searchInput);
   section.appendChild(searchContainer);
+
+  // Filtros de categoria
   const filterContainer = document.createElement('div');
   filterContainer.className = 'category-filters';
   const allBtn = document.createElement('button');
@@ -229,6 +237,8 @@ function buildMenu(categories, products) {
     });
   }
   section.appendChild(filterContainer);
+
+  // Info da categoria (escondido por padrão)
   const infoContainer = document.createElement('div');
   infoContainer.className = 'category-info';
   const descPara = document.createElement('p');
@@ -238,6 +248,8 @@ function buildMenu(categories, products) {
   sizesWrapper.className = 'category-sizes';
   infoContainer.appendChild(sizesWrapper);
   section.appendChild(infoContainer);
+
+  // Grid de produtos
   const grid = document.createElement('div');
   grid.className = 'product-grid';
   section.appendChild(grid);
@@ -247,6 +259,7 @@ function buildMenu(categories, products) {
     descPara.textContent = '';
     sizesWrapper.innerHTML = '';
     infoContainer.style.display = 'none';
+
     const term = (searchTerm || '').toLowerCase();
     const filtered = products.items.filter((item) => {
       if (!item.active) return false;
@@ -255,6 +268,7 @@ function buildMenu(categories, products) {
       const matchesSearch = term === '' || textToSearch.includes(term);
       return matchesCategory && matchesSearch;
     });
+
     if (!filtered.length) {
       const empty = document.createElement('p');
       empty.textContent = 'Nenhum produto encontrado.';
@@ -262,9 +276,12 @@ function buildMenu(categories, products) {
       grid.appendChild(empty);
       return;
     }
+
     filtered.forEach((product) => {
       const card = document.createElement('div');
       card.className = 'product-card';
+
+      // Imagem
       const imgWrap = document.createElement('div');
       imgWrap.className = 'product-image';
       if (product.image) {
@@ -282,6 +299,8 @@ function buildMenu(categories, products) {
         imgWrap.appendChild(span);
       }
       card.appendChild(imgWrap);
+
+      // Conteúdo
       const info = document.createElement('div');
       info.className = 'product-info';
       const nameEl = document.createElement('h3');
@@ -290,6 +309,8 @@ function buildMenu(categories, products) {
       const descEl = document.createElement('p');
       descEl.className = 'product-description';
       descEl.textContent = product.description;
+
+      // Tags
       const tagsEl = document.createElement('div');
       tagsEl.className = 'product-tags';
       if (product.tags && product.tags.length) {
@@ -300,14 +321,19 @@ function buildMenu(categories, products) {
           tagsEl.appendChild(t);
         });
       }
+
       info.appendChild(nameEl);
       info.appendChild(descEl);
+
+      // Preço/porções conforme tamanho selecionado
       const priceEl = document.createElement('div');
       priceEl.className = 'product-price';
       const servesEl = document.createElement('div');
       servesEl.className = 'product-serves';
+
       let basePrice = product.price || '';
       let serveInfo = product.serves || '';
+
       if (product.sizeTable && product.sizeTable.length) {
         const entry = product.sizeTable.find((entry) => {
           const sizeLetter = (entry.size || '').split(' ')[0];
@@ -321,11 +347,15 @@ function buildMenu(categories, products) {
           serveInfo = product.sizeTable[0].serves || serveInfo;
         }
       }
+
       priceEl.textContent = basePrice ? `${basePrice}` : '';
       servesEl.textContent = serveInfo || '';
+
       info.appendChild(priceEl);
       info.appendChild(servesEl);
       info.appendChild(tagsEl);
+
+      // CTA
       if (product.cta) {
         const ctaEl = document.createElement('a');
         ctaEl.className = 'product-cta';
@@ -334,7 +364,10 @@ function buildMenu(categories, products) {
         ctaEl.setAttribute('aria-label', product.cta.label || 'Pedir');
         info.appendChild(ctaEl);
       }
+
       card.appendChild(info);
+
+      // Badges
       if (product.bestseller) {
         const badge = document.createElement('div');
         badge.className = 'product-badge';
@@ -346,21 +379,25 @@ function buildMenu(categories, products) {
         badge.textContent = 'Novo';
         card.appendChild(badge);
       }
+
       grid.appendChild(card);
     });
   };
 
   function renderCategoryInfo(catFilter) {
+    // mantido oculto por padrão nesta versão
     descPara.textContent = '';
     sizesWrapper.innerHTML = '';
     infoContainer.style.display = 'none';
     return;
   }
 
+  // Estado
   let currentCategory = 'Todos';
   let currentSearch = '';
   let currentSize = 'P';
 
+  // Eventos
   filterContainer.addEventListener('click', (e) => {
     if (e.target && e.target.matches('.category-button')) {
       const buttons = filterContainer.querySelectorAll('.category-button');
@@ -387,9 +424,11 @@ function buildMenu(categories, products) {
     }
   });
 
+  // Tamanho padrão ativo
   const defaultSizeBtn = sizeSelector.querySelector('.size-button');
   if (defaultSizeBtn) defaultSizeBtn.classList.add('active');
 
+  // Render inicial
   renderProducts(currentCategory, currentSearch);
   return section;
 }
@@ -551,44 +590,31 @@ async function initSite() {
   const policies = await loadJSON('policies');
   const faq = await loadJSON('faq');
   const decorations = await loadJSON('decorations');
+
   const main = document.getElementById('main');
+
+  // Ordem/ligar-desligar por tema (fallback padrão)
   const order = (theme && theme.sectionsOrder) || ['hero','about','menu','gallery','custom','policies','faq'];
   const enabled = (theme && theme.sectionsEnabled) || {};
+
   order.forEach((sectionName) => {
     if (enabled.hasOwnProperty(sectionName) && !enabled[sectionName]) return;
     let el = null;
     switch (sectionName) {
-      case 'hero':
-        el = buildHero(hero);
-        break;
-      case 'about':
-        el = buildAbout(about);
-        break;
-      case 'menu':
-        el = buildMenu(categories, products);
-        break;
-      case 'decorations':
-        el = buildDecorations(decorations);
-        break;
-      case 'gallery':
-        el = buildGallery(gallery);
-        break;
-      case 'custom':
-        el = buildCustom(custom);
-        break;
-      case 'policies':
-        el = buildPolicies(policies);
-        break;
-      case 'faq':
-        el = buildFAQ(faq);
-        break;
-      default:
-        break;
+      case 'hero':        el = buildHero(hero); break;
+      case 'about':       el = buildAbout(about); break;
+      case 'menu':        el = buildMenu(categories, products); break;
+      case 'decorations': el = buildDecorations(decorations); break;
+      case 'gallery':     el = buildGallery(gallery); break;
+      case 'custom':      el = buildCustom(custom); break;
+      case 'policies':    el = buildPolicies(policies); break;
+      case 'faq':         el = buildFAQ(faq); break;
+      default: break;
     }
-    if (el) {
-      main.appendChild(el);
-    }
+    if (el) main.appendChild(el);
   });
+
+  // Footer
   const footerText = document.getElementById('footerText');
   if (footerText) {
     const brand = theme && theme.brandText ? theme.brandText : '';
@@ -598,5 +624,3 @@ async function initSite() {
 }
 
 document.addEventListener('DOMContentLoaded', initSite);
-</script>
-
