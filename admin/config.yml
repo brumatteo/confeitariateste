@@ -215,16 +215,15 @@ collections:
                 name: description
                 widget: text
                 required: false
-              - label: "Categoria (slug)"
+              - label: "Categoria"
                 name: category
-                widget: string
+                widget: relation
+                collection: categories
+                file: categories
+                search_fields: ["items.*"]
+                value_field: "items.*"
+                display_fields: ["items.*"]
                 required: false
-                hint: "Use exatamente o slug da categoria (ex.: especiais)."
-              - label: "Preço padrão (opcional)"
-                name: price
-                widget: string
-                required: false
-                hint: "Você pode detalhar por tamanho abaixo."
               - label: "Imagem do produto"
                 name: image
                 widget: image
@@ -256,10 +255,6 @@ collections:
                 widget: select
                 required: false
                 options: ["Novo", "Mais vendido", "Promoção"]
-              - label: "Ordem (opcional)"
-                name: order
-                widget: number
-                required: false
 
   # -------------------- DECORAÇÕES --------------------
   - name: decorations
