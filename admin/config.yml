@@ -17,44 +17,120 @@ collections:
         label: "Configurações do Tema"
         format: json
         fields:
-          # CORES (não mudei os nomes dos campos)
-          - { label: "Cor principal (títulos/destaques)",       name: primaryColor,   widget: color, allowInput: true, default: "#58410d", hint: "Usada nos títulos e elementos de destaque." }
-          - { label: "Cor de apoio (detalhes)",                  name: secondaryColor, widget: color, allowInput: true, required: false, default: "#7a5c4b", hint: "Detalhes como ícones e bordas sutis." }
-          - { label: "Fundo do site",                            name: backgroundColor,widget: color, allowInput: true, required: false, default: "#f8f6f3", hint: "Cor do plano de fundo das páginas." }
-          - { label: "Cor do texto (parágrafos)",                name: textColor,      widget: color, allowInput: true, required: false, default: "#5a4b42", hint: "Cor do texto comum." }
-          - { label: "Botões e tags ativas",                    name: buttonColor,    widget: color, allowInput: true, required: false, default: "#d99a9a", hint: "Cor dos botões e filtros ativos." }
-          - { label: "Cor dos cartões (área dos produtos)",      name: card,           widget: color, allowInput: true, required: false, default: "#ffffff", hint: "Fundo dos cards de produto." }
+          # CORES
+          - label: "Cor principal (títulos/destaques)"
+            name: primaryColor
+            widget: color
+            allowInput: true
+            default: "#58410d"
+            hint: "Usada nos títulos e elementos de destaque."
+          - label: "Cor de apoio (detalhes)"
+            name: secondaryColor
+            widget: color
+            allowInput: true
+            required: false
+            default: "#7a5c4b"
+            hint: "Detalhes como ícones e bordas sutis."
+          - label: "Fundo do site"
+            name: backgroundColor
+            widget: color
+            allowInput: true
+            required: false
+            default: "#f8f6f3"
+            hint: "Cor do plano de fundo das páginas."
+          - label: "Cor do texto (parágrafos)"
+            name: textColor
+            widget: color
+            allowInput: true
+            required: false
+            default: "#5a4b42"
+            hint: "Cor do texto comum."
+          - label: "Botões e tags ativas"
+            name: buttonColor
+            widget: color
+            allowInput: true
+            required: false
+            default: "#d99a9a"
+            hint: "Cor dos botões e filtros ativos."
+          - label: "Cor dos cartões (área dos produtos)"
+            name: card
+            widget: color
+            allowInput: true
+            required: false
+            default: "#ffffff"
+            hint: "Fundo dos cards de produto."
 
           # WHATSAPP
-          - { label: "WhatsApp (com DDI)",                       name: whatsapp,          widget: string, required: false, default: "+55 11999999999", hint: "Ex.: +55 11999999999" }
-          - { label: "Mensagem padrão do WhatsApp",              name: whatsappMessage,   widget: string, required: false, default: "Olá! Quero fazer um pedido 😊", hint: "Texto inicial ao clicar no botão." }
+          - label: "WhatsApp (com DDI)"
+            name: whatsapp
+            widget: string
+            required: false
+            default: "+55 11999999999"
+            hint: "Ex.: +55 11999999999"
+          - label: "Mensagem padrão do WhatsApp"
+            name: whatsappMessage
+            widget: string
+            required: false
+            default: "Olá! Quero fazer um pedido 😊"
+            hint: "Texto inicial ao clicar no botão."
 
           # OUTROS
-          - { label: "Mostrar seção 'Sobre'",                    name: showAbout, widget: boolean, default: true, hint: "Liga/desliga a seção Sobre na página." }
+          - label: "Mostrar seção 'Sobre'"
+            name: showAbout
+            widget: boolean
+            default: true
+            hint: "Liga/desliga a seção Sobre na página."
 
- # -------------------- BANNER (CAPA) --------------------
-- name: hero
-  label: "Banner (capa)"
-  delete: false
-  files:
-    - file: "content/hero.json"
-      name: hero
-      label: "Banner (capa)"
-      format: json
-      fields:
-        - { label: "Título grande do banner", name: title, widget: string, default: "Sua Celebração, Nossa Assinatura" }
-        - { label: "Subtítulo (texto menor)", name: subtitle, widget: text, required: false, default: "Bolos decorados sob medida para momentos que merecem ser lembrados." }
-        - { label: "Imagem de fundo do banner (opcional)", name: image, widget: image, required: false, default: "images/hero.jpg" }
-        - { label: "Efeito de sobreposição (gradiente) (opcional)", name: overlay, widget: string, required: false, default: "linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2))" }
-        - { label: "Opacidade do efeito (0 a 1)", name: opacity, widget: number, min: 0, max: 1, step: 0.05, required: false, default: 0.6 }
-        - label: "Botão do banner"
-          name: cta
-          widget: object
-          collapsed: false
-          fields:
-            - { label: "Texto do botão", name: label, widget: string, default: "Ver Cardápio" }
-            - { label: "Para onde o botão leva", name: href, widget: string, default: "#menu" }
-
+  # -------------------- BANNER (CAPA) --------------------
+  - name: hero
+    label: "Banner (capa)"
+    delete: false
+    files:
+      - file: "content/hero.json"
+        name: hero
+        label: "Banner (capa)"
+        format: json
+        fields:
+          - label: "Título grande do banner"
+            name: title
+            widget: string
+            default: "Sua Celebração, Nossa Assinatura"
+          - label: "Subtítulo (texto menor)"
+            name: subtitle
+            widget: text
+            required: false
+            default: "Bolos decorados sob medida para momentos que merecem ser lembrados."
+          - label: "Imagem de fundo do banner (opcional)"
+            name: image
+            widget: image
+            required: false
+            default: "images/hero.jpg"
+          - label: "Efeito de sobreposição (gradiente) (opcional)"
+            name: overlay
+            widget: string
+            required: false
+            default: "linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2))"
+          - label: "Opacidade do efeito (0 a 1)"
+            name: opacity
+            widget: number
+            min: 0
+            max: 1
+            step: 0.05
+            required: false
+            default: 0.6
+          - label: "Botão do banner"
+            name: cta
+            widget: object
+            collapsed: false
+            fields:
+              - label: "Texto do botão"
+                name: label
+                widget: string
+                default: "Ver Cardápio"
+              - label: "Para onde o botão leva"
+                name: href
+                widget: string
+                default: "#menu"
 
   # -------------------- SOBRE --------------------
   - name: about
@@ -66,17 +142,34 @@ collections:
         label: "Seção Sobre"
         format: json
         fields:
-          - { label: "Título da seção", name: title, widget: string, default: "Sobre" }
-          - { label: "Texto de apresentação", name: text, widget: text, default: "Olá! Somos especializados em bolos decorados com buttercream, feitos com carinho e ingredientes selecionados." }
-          - { label: "Imagem (opcional)", name: image, widget: image, required: false, default: "images/about.jpg" }
+          - label: "Título da seção"
+            name: title
+            widget: string
+            default: "Sobre"
+          - label: "Texto de apresentação"
+            name: text
+            widget: text
+            default: "Olá! Somos especializados em bolos decorados com buttercream, feitos com carinho e ingredientes selecionados."
+          - label: "Imagem (opcional)"
+            name: image
+            widget: image
+            required: false
+            default: "images/about.jpg"
           - label: "Diferenciais (lista opcional)"
             name: features
             widget: list
             allow_add: true
             fields:
-              - { label: "Ícone (opcional)",  name: icon,  widget: image, required: false }
-              - { label: "Título",            name: title, widget: string }
-              - { label: "Texto",             name: text,  widget: text }
+              - label: "Ícone (opcional)"
+                name: icon
+                widget: image
+                required: false
+              - label: "Título"
+                name: title
+                widget: string
+              - label: "Texto"
+                name: text
+                widget: text
 
   # -------------------- CATEGORIAS --------------------
   - name: categories
@@ -91,11 +184,19 @@ collections:
             name: items
             widget: list
             fields:
-              - { label: "Nome visível",  name: name,  widget: string }
-              - { label: "Slug (sem espaço, minúsculo)",  name: slug,  widget: string, hint: "Ex.: especiais, tradicionais" }
-              - { label: "Ordem (opcional)", name: order, widget: number, required: false }
+              - label: "Nome visível"
+                name: name
+                widget: string
+              - label: "Slug (sem espaço, minúsculo)"
+                name: slug
+                widget: string
+                hint: "Ex.: especiais, tradicionais"
+              - label: "Ordem (opcional)"
+                name: order
+                widget: number
+                required: false
             default:
-              - { name: "Especiais",    slug: "especiais",    order: 1 }
+              - { name: "Especiais", slug: "especiais", order: 1 }
               - { name: "Tradicionais", slug: "tradicionais", order: 2 }
 
   # -------------------- PRODUTOS --------------------
@@ -112,25 +213,56 @@ collections:
             widget: list
             allow_add: true
             fields:
-              - { label: "Ativo",                 name: active,      widget: boolean, default: true }
-              - { label: "Nome do bolo",          name: name,        widget: string }
-              - { label: "Descrição",             name: description, widget: text, required: false }
-              - { label: "Categoria (slug)",      name: category,    widget: string, required: false, hint: "Use exatamente o slug da categoria (ex.: especiais)." }
-              - { label: "Preço padrão (opcional)", name: price,     widget: string, required: false, hint: "Você pode detalhar por tamanho abaixo." }
-              - { label: "Imagem do produto",     name: image,       widget: image, required: false }
+              - label: "Ativo"
+                name: active
+                widget: boolean
+                default: true
+              - label: "Nome do bolo"
+                name: name
+                widget: string
+              - label: "Descrição"
+                name: description
+                widget: text
+                required: false
+              - label: "Categoria (slug)"
+                name: category
+                widget: string
+                required: false
+                hint: "Use exatamente o slug da categoria (ex.: especiais)."
+              - label: "Preço padrão (opcional)"
+                name: price
+                widget: string
+                required: false
+                hint: "Você pode detalhar por tamanho abaixo."
+              - label: "Imagem do produto"
+                name: image
+                widget: image
+                required: false
               - label: "Tamanhos (opcional)"
                 name: sizes
                 widget: list
                 required: false
                 fields:
-                  - { label: "Nome (P/M/G…)", name: label, widget: string }
-                  - { label: "Preço",         name: price, widget: string, required: false }
+                  - label: "Nome (P/M/G…)"
+                    name: label
+                    widget: string
+                  - label: "Preço"
+                    name: price
+                    widget: string
+                    required: false
                 default:
                   - { label: "P", price: "" }
                   - { label: "M", price: "" }
                   - { label: "G", price: "" }
-              - { label: "Etiqueta (opcional)", name: badge, widget: select, required: false, options: ["Novo", "Mais vendido", "Promoção"] }
-              - { label: "Ordem (opcional)", name: order, widget: number, required: false }
+              - label: "Etiqueta (opcional)"
+                name: badge
+                widget: select
+                required: false
+                options: ["Novo", "Mais vendido", "Promoção"]
+              - label: "Ordem (opcional)"
+                name: order
+                widget: number
+                required: false
 
   # -------------------- DECORAÇÕES --------------------
   - name: decorations
@@ -145,8 +277,13 @@ collections:
             name: items
             widget: list
             fields:
-              - { label: "Nome",   name: name,  widget: string }
-              - { label: "Imagem", name: image, widget: image, required: false }
+              - label: "Nome"
+                name: name
+                widget: string
+              - label: "Imagem"
+                name: image
+                widget: image
+                required: false
 
   # -------------------- GALERIA (do template) --------------------
   - name: gallery
@@ -174,14 +311,24 @@ collections:
         label: "Informações/Políticas"
         format: json
         fields:
-          - { label: "Título da seção", name: title, widget: string, default: "Informações & Políticas" }
+          - label: "Título da seção"
+            name: title
+            widget: string
+            default: "Informações & Políticas"
           - label: "Blocos de informação"
             name: items
             widget: list
             fields:
-              - { label: "Título", name: title, widget: string }
-              - { label: "Texto",  name: text,  widget: text }
-              - { label: "Ícone (opcional)",  name: icon,  widget: image, required: false }
+              - label: "Título"
+                name: title
+                widget: string
+              - label: "Texto"
+                name: text
+                widget: text
+              - label: "Ícone (opcional)"
+                name: icon
+                widget: image
+                required: false
 
   # -------------------- FAQ --------------------
   - name: faq
@@ -196,5 +343,9 @@ collections:
             name: items
             widget: list
             fields:
-              - { label: "Pergunta", name: question, widget: string }
-              - { label: "Resposta", name: answer,   widget: text }
+              - label: "Pergunta"
+                name: question
+                widget: string
+              - label: "Resposta"
+                name: answer
+                widget: text
