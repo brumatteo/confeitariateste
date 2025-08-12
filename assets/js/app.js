@@ -77,7 +77,7 @@ function applyTheme(theme) {
 }
 
 const forceBtnStyles = () => {
-  document.querySelectorAll('.header-cta, .product-cta').forEach(el => {
+  document.querySelectorAll('.header-cta, .product-cta, .hero-cta').forEach(el => {
     el.style.background = 'var(--button)';
     el.style.borderColor = 'var(--button)';
     el.style.color = '#fff';
