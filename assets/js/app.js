@@ -63,13 +63,23 @@ function buildHero(data) {
     section.appendChild(img);
   }
 
-  const overlay = document.createElement('div');
-  overlay.className = 'overlay';
-  overlay.style.background = (data && data.overlay) || 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
-  const raw = (data && typeof data.opacity === 'number') ? data.opacity : 60; // 0–100
-  const clamped = Math.max(0, Math.min(100, raw));
-  overlay.style.opacity = (clamped / 100).toString();
-  section.appendChild(overlay);
+const overlay = document.createElement('div');
+overlay.className = 'overlay';
+
+// Definir gradiente e opacidade
+overlay.style.background =
+  (data && data.overlay) ||
+  'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
+
+const raw = (typeof data?.overlayOpacity === 'number')
+  ? data.overlayOpacity
+  : (typeof data?.opacity === 'number')
+    ? data.opacity
+    : 60; // valor padrão em %
+
+overlay.style.opacity = Math.max(0, Math.min(1, raw / 100));
+section.appendChild(overlay);
+
 
   const container = document.createElement('div');
   container.className = 'hero-content';
