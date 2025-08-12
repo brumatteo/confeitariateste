@@ -1,102 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cardápio Bolo à Vista</title>
-  <meta name="description" content="Cardápio de bolos decorados, feitos sob medida e personalizados.">
-
-  <!-- Evita cache agressivo do HTML (ajuda nas trocas de build) -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600;1,9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="assets/css/styles.css">
-
-  <!-- Overrides mínimos para usar as cores vindas do CMS -->
-  <style id="cms-theme-overrides">
-    /* Defaults de segurança (são substituídos pelo theme.json via app.js) */
-    :root{
-      --primary:#58410d;
-      --secondary:#7a5c4b;
-      --bg:#f8f6f3;
-      --card:#ffffff;
-      --text:#5a4b42;
-      --button:#d99a9a; /* esta é a que vem do CMS: theme.buttonColor */
-    }
-
-    /* Garantir que botões usem a --button */
-    .header-cta,
-    .product-cta,
-    .size-button.active,
-    .category-button.active {
-      background: var(--button) !important;
-      border-color: var(--button) !important;
-      color: #fff !important;
-    }
-
-    /* Bordas/estados inativos ainda alinhados com a cor do botão */
-    .size-button,
-    .category-button {
-      border-color: var(--button) !important;
-    }
-
-    .header-cta:hover,
-    .product-cta:hover {
-      filter: brightness(0.95);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardápio Bolo à Vista</title>
+<meta name="description" content="Cardápio de bolos decorados, feitos sob medida e personalizados.">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600;1,9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<style id="cms-theme-overrides">
+:root{
+  --primary:#58410d;
+  --secondary:#7a5c4b;
+  --bg:#f8f6f3;
+  --card:#ffffff;
+  --text:#5a4b42;
+  --button:#d99a9a;
+}
+.header-cta,
+.product-cta,
+.size-button.active,
+.category-button.active {
+  background: var(--button) !important;
+  border-color: var(--button) !important;
+  color: #fff !important;
+}
+.size-button,
+.category-button {
+  border-color: var(--button) !important;
+}
+.header-cta:hover,
+.product-cta:hover {
+  filter: brightness(0.95);
+}
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header id="header">
-    <nav class="nav-bar">
-      <div class="brand-text" id="brandText">Bolo à Vista</div>
-      <a class="header-cta" id="headerCta" href="#" aria-label="Fazer pedido no WhatsApp">WhatsApp</a>
-    </nav>
-  </header>
-
-  <!-- Main content will be injected via JS -->
-  <main id="main"></main>
-
-  <!-- Footer -->
-  <footer id="footer">
-    <div class="footer-inner">
-      <p id="footerText"></p>
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <!-- Conteúdo padrão para pré-visualização local -->
-  <script src="assets/js/data.js"></script>
-
-  <!-- QUEBRA-CACHE para os JSON do CMS (lido pelo app.js -> loadJSON) -->
-  <script>
-    // Usa timestamp diferente a cada deploy/atualização
-    window.__BUILD_ID__ = Date.now();
-  </script>
-
-  <!-- App principal que monta o site -->
-  <script src="assets/js/app.js"></script>
-
-  <!-- Netlify Identity Script (login) -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script>
-    if (window.netlifyIdentity) {
-      const hasToken = /token=|confirmation_token=|recovery_token=|invite_token=/.test(location.href);
-      window.netlifyIdentity.on('init', function () {
-        if (hasToken) window.netlifyIdentity.open();
-      });
-      ['login','signup','passwordRecovery'].forEach(function (evt) {
-        window.netlifyIdentity.on(evt, function () {
-          location.href = '/admin/';
-        });
-      });
-    }
-  </script>
-</body>
-</html>
+<header id="header">
+  <nav class="nav-bar">
+    <div class="brand-text" id="brandText">Bolo à Vista</div>
+    <a class="header-cta" id="headerCta" href="#" aria-label="Fazer pedido no WhatsApp">WhatsApp</a>
+  </nav>
+</header>
+<main id="main"></main>
+<footer id="footer">
+  <div class="footer-inner">
+    <p id="footerText"></p>
+  </div>
+</footer>
+<script src="assets/js/data.js"></script>
+<script>window.__BUILD_ID__=Date.no
