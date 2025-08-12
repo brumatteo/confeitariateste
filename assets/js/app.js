@@ -1,3 +1,4 @@
+<script>
 /*
  * Script principal responsável por carregar o conteúdo em JSON, aplicar o tema
  * e construir as seções do site dinamicamente. O objetivo é que todo o
@@ -6,7 +7,7 @@
 
 // Função utilitária para carregar arquivos JSON do diretório /content
 async function loadJSON(name) {
-  const bust = (window.__BUILD_ID__ || Date.now()); // evita cache
+  const bust = (window.__BUILD_ID__ || Date.now());
   const url = `content/${name}.json?v=${bust}`;
   try {
     const response = await fetch(url, {
@@ -16,7 +17,6 @@ async function loadJSON(name) {
     if (!response.ok) throw new Error(`Não foi possível carregar ${name}`);
     return await response.json();
   } catch (e) {
-    // Log o erro e usa fallback se existir
     console.warn(`Falha ao carregar ${name}.json, usando dados padrão se disponíveis.`, e);
     if (window.defaultContent && window.defaultContent[name]) {
       return window.defaultContent[name];
@@ -38,18 +38,27 @@ function debounce(func, delay) {
 
 // Aplica as cores e textos definidos no tema
 function applyTheme(theme) {
+  const t = { ...theme };
+  if (t.primaryColor && !t.primary) t.primary = t.primaryColor;
+  if (t.secondaryColor && !t.secondary) t.secondary = t.secondaryColor;
+  if (t.backgroundColor && !t.bg) t.bg = t.backgroundColor;
+  if (t.textColor && !t.text) t.text = t.textColor;
+  if (t.cardColor && !t.card) t.card = t.cardColor;
+  if (t.card === undefined && t.cardColor === undefined && t.card === undefined && theme.card) t.card = theme.card;
+
   const root = document.documentElement;
-  if (theme.primary) root.style.setProperty('--primary', theme.primary);
-  if (theme.secondary) root.style.setProperty('--secondary', theme.secondary);
-  if (theme.bg) root.style.setProperty('--bg', theme.bg);
-  if (theme.card) root.style.setProperty('--card', theme.card);
-  if (theme.text) root.style.setProperty('--text', theme.text);
+  if (t.primary) root.style.setProperty('--primary', t.primary);
+  if (t.secondary) root.style.setProperty('--secondary', t.secondary);
+  if (t.bg) root.style.setProperty('--bg', t.bg);
+  if (t.card) root.style.setProperty('--card', t.card);
+  if (t.text) root.style.setProperty('--text', t.text);
+
   const brand = document.getElementById('brandText');
   const cta = document.getElementById('headerCta');
-  if (brand && theme.brandText) brand.textContent = theme.brandText;
-  if (cta && theme.headerCta) {
-    cta.textContent = theme.headerCta.label || '';
-    cta.href = theme.headerCta.href || '#';
+  if (brand && t.brandText) brand.textContent = t.brandText;
+  if (cta && t.headerCta) {
+    cta.textContent = t.headerCta.label || '';
+    cta.href = t.headerCta.href || '#';
   }
 }
 
@@ -69,8 +78,6 @@ function buildHero(data) {
 
   const overlay = document.createElement('div');
   overlay.className = 'overlay';
-
-  // Definir gradiente e opacidade
   overlay.style.background =
     (data && data.overlay) ||
     'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
@@ -79,7 +86,7 @@ function buildHero(data) {
     ? data.overlayOpacity
     : (typeof data?.opacity === 'number')
       ? data.opacity
-      : 60; // valor padrão em %
+      : 60;
 
   overlay.style.opacity = Math.max(0, Math.min(1, raw / 100));
   section.appendChild(overlay);
@@ -158,7 +165,7 @@ function buildAbout(data) {
       const ftTitle = document.createElement('h3');
       ftTitle.textContent = item.title || '';
       const ftText = document.createElement('p');
-      ftText.textContent = item.text || '';
+        ftText.textContent = item.text || '';
       itemEl.appendChild(ftTitle);
       itemEl.appendChild(ftText);
       featuresWrapper.appendChild(itemEl);
@@ -591,3 +598,5 @@ async function initSite() {
 }
 
 document.addEventListener('DOMContentLoaded', initSite);
+</script>
+
