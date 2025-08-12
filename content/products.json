@@ -6,7 +6,7 @@
       "serves": "20 fatias",
       "active": true,
       "price": "R$ 250,00",
-      "name": "Red Velvet",
+      "name": "Velvet Cream",
       "sizeTable": [
         {
           "size": "P 15cm",
@@ -28,6 +28,7 @@
         "label": "Escolher decoração",
         "href": "#decorations"
       },
+      "sizes": [],
       "tags": [
         "red velvet",
         "cream cheese"
