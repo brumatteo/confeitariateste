@@ -8,7 +8,7 @@
     "policies",
     "faq"
   ],
-  "primaryColor": "#97ad59",
+  "primaryColor": "#d9a5a0",
   "primary": "#d9a5a0",
   "headerCta": {
     "label": "Pedir no WhatsApp",
@@ -19,7 +19,7 @@
   "secondaryColor": "#7a5c4b",
   "showAbout": true,
   "card": "#ffffff",
-  "buttonColor": "#a62418",
+  "buttonColor": "#d9a5a0",
   "sectionsEnabled": {
     "hero": true,
     "about": true,
@@ -32,6 +32,6 @@
   },
   "brandText": "Vanilla Cake Studio",
   "secondary": "#7a5c4b",
-  "backgroundColor": "#b18748",
+  "backgroundColor": "#f8f6f3",
   "textColor": "#5a4b42"
 }
