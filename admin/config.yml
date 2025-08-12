@@ -110,14 +110,14 @@ collections:
             widget: string
             required: false
             default: "linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2))"
-          - label: "Opacidade do efeito (0 a 1)"
+          - label: "Opacidade do efeito (%)"
             name: opacity
             widget: number
             min: 0
-            max: 1
-            step: 0.05
+            max: 100
+            step: 1
             required: false
-            default: 0.6
+            default: 60
           - label: "Botão do banner"
             name: cta
             widget: object
