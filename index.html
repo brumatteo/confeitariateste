@@ -20,10 +20,17 @@
   --button:#d99a9a;
 }
 
-/* Agora inclui .hero-cta */
 .header-cta,
 .hero-cta,
 .product-cta,
+.custom-cta,
+a.cta,
+a.button,
+button.cta,
+a[class*="cta"],
+button[class*="cta"],
+.btn,
+.button,
 .size-button.active,
 .category-button.active {
   background: var(--button) !important;
@@ -31,7 +38,6 @@
   color: #fff !important;
 }
 
-/* Bordas/estados inativos seguem a cor do botão */
 .size-button,
 .category-button {
   border-color: var(--button) !important;
@@ -39,7 +45,13 @@
 
 .header-cta:hover,
 .hero-cta:hover,
-.product-cta:hover {
+.product-cta:hover,
+.custom-cta:hover,
+a.cta:hover,
+a.button:hover,
+button.cta:hover,
+.btn:hover,
+.button:hover {
   filter: brightness(0.95);
 }
 </style>
