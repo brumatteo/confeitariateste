@@ -1,4 +1,4 @@
-<script>
+
 /*
  * Script principal responsável por carregar o conteúdo em JSON, aplicar o tema
  * e construir as seções do site dinamicamente. Todo o conteúdo é editável via CMS.
@@ -631,4 +631,3 @@ async function initSite() {
 }
 
 document.addEventListener('DOMContentLoaded', initSite);
-</script>
