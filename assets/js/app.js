@@ -6,14 +6,18 @@
 
 // Função utilitária para carregar arquivos JSON do diretório /content
 async function loadJSON(name) {
+  const bust = (window.__BUILD_ID__ || Date.now()); // evita cache
+  const url = `content/${name}.json?v=${bust}`;
   try {
-    const response = await fetch(`content/${name}.json`);
-    // In many browsers, fetch() fails on the file protocol. If that happens, we'll fall back below.
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache' }
+    });
     if (!response.ok) throw new Error(`Não foi possível carregar ${name}`);
     return await response.json();
   } catch (e) {
-    // Log the error once but gracefully degrade to default content if available
-    console.warn(`Falha ao carregar ${name}.json, usando dados padrão se disponíveis.`);
+    // Log o erro e usa fallback se existir
+    console.warn(`Falha ao carregar ${name}.json, usando dados padrão se disponíveis.`, e);
     if (window.defaultContent && window.defaultContent[name]) {
       return window.defaultContent[name];
     }
@@ -63,23 +67,22 @@ function buildHero(data) {
     section.appendChild(img);
   }
 
-const overlay = document.createElement('div');
-overlay.className = 'overlay';
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
 
-// Definir gradiente e opacidade
-overlay.style.background =
-  (data && data.overlay) ||
-  'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
+  // Definir gradiente e opacidade
+  overlay.style.background =
+    (data && data.overlay) ||
+    'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
 
-const raw = (typeof data?.overlayOpacity === 'number')
-  ? data.overlayOpacity
-  : (typeof data?.opacity === 'number')
-    ? data.opacity
-    : 60; // valor padrão em %
+  const raw = (typeof data?.overlayOpacity === 'number')
+    ? data.overlayOpacity
+    : (typeof data?.opacity === 'number')
+      ? data.opacity
+      : 60; // valor padrão em %
 
-overlay.style.opacity = Math.max(0, Math.min(1, raw / 100));
-section.appendChild(overlay);
-
+  overlay.style.opacity = Math.max(0, Math.min(1, raw / 100));
+  section.appendChild(overlay);
 
   const container = document.createElement('div');
   container.className = 'hero-content';
@@ -588,3 +591,4 @@ async function initSite() {
 }
 
 document.addEventListener('DOMContentLoaded', initSite);
+
