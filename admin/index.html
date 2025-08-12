@@ -1,15 +1,16 @@
 <!doctype html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Painel de Administração</title>
-  <meta name="robots" content="noindex">
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
-  <!-- 1) Widget de login do Netlify -->
+  <!-- Netlify Identity (login) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- 2) Redireciona para /admin após login -->
+  <!-- Redireciona para /admin após login -->
   <script>
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", (user) => {
@@ -22,7 +23,15 @@
     }
   </script>
 
-  <!-- Painel do Decap CMS -->
+  <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@3.0.0/dist/decap-cms.js"></script>
+
+  <!-- Opções extras: idioma e pequenos ajustes -->
+  <script>
+    // força interface do CMS para PT-BR (quando disponível)
+    if (window.CMS && CMS.registerLocale) {
+      CMS.registerLocale('pt');
+    }
+  </script>
 </body>
 </html>
