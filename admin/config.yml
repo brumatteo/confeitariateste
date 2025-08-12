@@ -201,6 +201,8 @@ collections:
             name: items
             widget: list
             allow_add: true
+            collapsed: false
+            summary: "{{fields.name}} — {{fields.category}}"
             fields:
               - label: "Ativo"
                 name: active
@@ -231,6 +233,9 @@ collections:
                 name: sizes
                 widget: list
                 required: false
+                label_singular: "tamanho"
+                collapsed: false
+                summary: "{{fields.label}} — {{fields.price}}"
                 fields:
                   - label: "Nome (P/M/G…)"
                     name: label
@@ -338,3 +343,4 @@ collections:
               - label: "Resposta"
                 name: answer
                 widget: text
+
