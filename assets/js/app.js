@@ -49,47 +49,40 @@ function applyTheme(theme) {
   }
 }
 
-// Constrói a seção Hero
+// Constrói a seção Hero (opacidade em % e sem duplicação do overlay)
 function buildHero(data) {
   const section = document.createElement('section');
   section.className = 'hero';
   section.id = 'hero';
 
-  // Imagem de fundo
-  if (data.image) {
+  if (data && data.image) {
     const img = document.createElement('img');
     img.src = data.image;
     img.alt = data.title || '';
     img.loading = 'lazy';
     section.appendChild(img);
   }
-  // Overlay
+
   const overlay = document.createElement('div');
   overlay.className = 'overlay';
-  // Define gradiente e opacidade conforme JSON
-// Overlay
-const overlay = document.createElement('div');
-overlay.className = 'overlay';
-
-// Definir gradiente e opacidade conforme JSON (opacidade agora vem em %)
-overlay.style.background = data.overlay || 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
-const op = (typeof data.opacity === 'number') ? data.opacity : 60; // 60%
-overlay.style.opacity = Math.max(0, Math.min(1, op / 100));
-
-section.appendChild(overlay);
+  overlay.style.background = (data && data.overlay) || 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2))';
+  const raw = (data && typeof data.opacity === 'number') ? data.opacity : 60; // 0–100
+  const clamped = Math.max(0, Math.min(100, raw));
+  overlay.style.opacity = (clamped / 100).toString();
+  section.appendChild(overlay);
 
   const container = document.createElement('div');
   container.className = 'hero-content';
   const title = document.createElement('h1');
   title.className = 'hero-title';
-  title.textContent = data.title || '';
+  title.textContent = (data && data.title) || '';
   const subtitle = document.createElement('p');
   subtitle.className = 'hero-subtitle';
-  subtitle.textContent = data.subtitle || '';
+  subtitle.textContent = (data && data.subtitle) || '';
   container.appendChild(title);
   container.appendChild(subtitle);
-  // CTA
-  if (data.cta) {
+
+  if (data && data.cta) {
     const cta = document.createElement('a');
     cta.className = 'hero-cta';
     cta.textContent = data.cta.label || '';
@@ -97,6 +90,7 @@ section.appendChild(overlay);
     cta.setAttribute('aria-label', data.cta.label || 'Chamada para ação');
     container.appendChild(cta);
   }
+
   section.appendChild(container);
   return section;
 }
@@ -106,10 +100,8 @@ function buildAbout(data) {
   const section = document.createElement('section');
   section.className = 'about';
   section.id = 'about';
-  // Grid com texto e imagem
   const grid = document.createElement('div');
   grid.className = 'about-grid';
-  // Texto
   const textWrapper = document.createElement('div');
   textWrapper.className = 'about-text-wrapper';
   const title = document.createElement('h2');
@@ -120,7 +112,6 @@ function buildAbout(data) {
   text.textContent = data.text || '';
   textWrapper.appendChild(title);
   textWrapper.appendChild(text);
-  // Imagem
   let imageEl = null;
   if (data.image) {
     const img = document.createElement('img');
@@ -130,18 +121,15 @@ function buildAbout(data) {
     img.loading = 'lazy';
     imageEl = img;
   }
-  // Adiciona elementos ao grid
   grid.appendChild(textWrapper);
   if (imageEl) grid.appendChild(imageEl);
   section.appendChild(grid);
-  // Lista de features/icon separada abaixo do grid
   if (data.features && Array.isArray(data.features) && data.features.length) {
     const featuresWrapper = document.createElement('div');
     featuresWrapper.className = 'features-row';
     data.features.forEach((item) => {
       const itemEl = document.createElement('div');
       itemEl.className = 'feature-item';
-      // Ícone: imagem ou texto
       if (item.icon && (item.icon.includes('/') || item.icon.includes('.'))) {
         const imgIcon = document.createElement('img');
         imgIcon.src = item.icon;
@@ -176,12 +164,10 @@ function buildMenu(categories, products) {
   title.className = 'menu-title';
   title.textContent = 'Escolha Seu Bolo Ideal';
   section.appendChild(title);
-  // Subtítulo explicativo de como escolher o bolo (sabor/tamanho)
   const subtitle = document.createElement('p');
   subtitle.className = 'menu-subtitle';
   subtitle.textContent = 'Defina o sabor e o tamanho';
   section.appendChild(subtitle);
-  // Seletor de tamanho (P, M, G)
   const sizeSelector = document.createElement('div');
   sizeSelector.className = 'size-selector';
   const sizeLabel = document.createElement('span');
@@ -197,7 +183,6 @@ function buildMenu(categories, products) {
     sizeSelector.appendChild(btn);
   });
   section.appendChild(sizeSelector);
-  // Barra de busca
   const searchContainer = document.createElement('div');
   searchContainer.className = 'search-container';
   const searchInput = document.createElement('input');
@@ -207,10 +192,8 @@ function buildMenu(categories, products) {
   searchInput.setAttribute('aria-label', 'Buscar produto');
   searchContainer.appendChild(searchInput);
   section.appendChild(searchContainer);
-  // Filtros de categoria
   const filterContainer = document.createElement('div');
   filterContainer.className = 'category-filters';
-  // Botão para todos
   const allBtn = document.createElement('button');
   allBtn.className = 'category-button active';
   allBtn.textContent = 'Todos';
@@ -226,32 +209,24 @@ function buildMenu(categories, products) {
     });
   }
   section.appendChild(filterContainer);
-  // Informação da categoria (descrição) - esconder inicialmente; preços não são mais exibidos aqui
-
-  // Informações da categoria (descrição e tabela de tamanhos)
   const infoContainer = document.createElement('div');
   infoContainer.className = 'category-info';
-  // Descrição da categoria
   const descPara = document.createElement('p');
   descPara.className = 'category-description';
   infoContainer.appendChild(descPara);
-  // Tabela de tamanhos
   const sizesWrapper = document.createElement('div');
   sizesWrapper.className = 'category-sizes';
   infoContainer.appendChild(sizesWrapper);
   section.appendChild(infoContainer);
-  // Grid de produtos
   const grid = document.createElement('div');
   grid.className = 'product-grid';
   section.appendChild(grid);
 
-  // Função para renderizar produtos com base em filtros
   const renderProducts = (catFilter, searchTerm) => {
-    // Limpa grid
     grid.innerHTML = '';
-    // Atualiza info de categoria
-    renderCategoryInfo(catFilter);
-    // Normaliza entrada
+    descPara.textContent = '';
+    sizesWrapper.innerHTML = '';
+    infoContainer.style.display = 'none';
     const term = (searchTerm || '').toLowerCase();
     const filtered = products.items.filter((item) => {
       if (!item.active) return false;
@@ -270,7 +245,6 @@ function buildMenu(categories, products) {
     filtered.forEach((product) => {
       const card = document.createElement('div');
       card.className = 'product-card';
-      // Imagem
       const imgWrap = document.createElement('div');
       imgWrap.className = 'product-image';
       if (product.image) {
@@ -280,7 +254,6 @@ function buildMenu(categories, products) {
         img.loading = 'lazy';
         imgWrap.appendChild(img);
       } else {
-        // Placeholder simples
         imgWrap.style.background = '#f4f2ef';
         const span = document.createElement('span');
         span.textContent = product.name.charAt(0);
@@ -289,7 +262,6 @@ function buildMenu(categories, products) {
         imgWrap.appendChild(span);
       }
       card.appendChild(imgWrap);
-      // Conteúdo
       const info = document.createElement('div');
       info.className = 'product-info';
       const nameEl = document.createElement('h3');
@@ -298,10 +270,6 @@ function buildMenu(categories, products) {
       const descEl = document.createElement('p');
       descEl.className = 'product-description';
       descEl.textContent = product.description;
-      // Preço e porções individuais foram removidos do card principal. As três
-      // opções de tamanho (P/M/G) são exibidas abaixo da descrição através de
-      // product.sizeTable.
-      // Tags
       const tagsEl = document.createElement('div');
       tagsEl.className = 'product-tags';
       if (product.tags && product.tags.length) {
@@ -314,7 +282,6 @@ function buildMenu(categories, products) {
       }
       info.appendChild(nameEl);
       info.appendChild(descEl);
-      // Preço e porções baseados no tamanho selecionado (P/M/G)
       const priceEl = document.createElement('div');
       priceEl.className = 'product-price';
       const servesEl = document.createElement('div');
@@ -322,7 +289,6 @@ function buildMenu(categories, products) {
       let basePrice = product.price || '';
       let serveInfo = product.serves || '';
       if (product.sizeTable && product.sizeTable.length) {
-        // Procura entrada que comece com o tamanho atual (ex.: "P" em "P 15cm")
         const entry = product.sizeTable.find((entry) => {
           const sizeLetter = (entry.size || '').split(' ')[0];
           return sizeLetter === currentSize;
@@ -331,7 +297,6 @@ function buildMenu(categories, products) {
           basePrice = entry.price || basePrice;
           serveInfo = entry.serves || serveInfo;
         } else {
-          // fallback para primeira entrada
           basePrice = product.sizeTable[0].price || basePrice;
           serveInfo = product.sizeTable[0].serves || serveInfo;
         }
@@ -341,7 +306,6 @@ function buildMenu(categories, products) {
       info.appendChild(priceEl);
       info.appendChild(servesEl);
       info.appendChild(tagsEl);
-      // CTA
       if (product.cta) {
         const ctaEl = document.createElement('a');
         ctaEl.className = 'product-cta';
@@ -351,7 +315,6 @@ function buildMenu(categories, products) {
         info.appendChild(ctaEl);
       }
       card.appendChild(info);
-      // Badges
       if (product.bestseller) {
         const badge = document.createElement('div');
         badge.className = 'product-badge';
@@ -367,24 +330,17 @@ function buildMenu(categories, products) {
     });
   };
 
-  /**
-   * Renderiza as informações específicas da categoria selecionada (descrição e tamanhos).
-   * Caso nenhuma categoria específica esteja selecionada (Todos), o bloco é escondido.
-   * @param {string} catFilter categoria atual selecionada
-   */
   function renderCategoryInfo(catFilter) {
-    // Sempre esconde o container de descrição e preços para evitar duplicação
     descPara.textContent = '';
     sizesWrapper.innerHTML = '';
     infoContainer.style.display = 'none';
     return;
   }
-  // Estado atual
+
   let currentCategory = 'Todos';
   let currentSearch = '';
-  // Tamanho selecionado (P, M ou G). Default: P
   let currentSize = 'P';
-  // Eventos de filtros
+
   filterContainer.addEventListener('click', (e) => {
     if (e.target && e.target.matches('.category-button')) {
       const buttons = filterContainer.querySelectorAll('.category-button');
@@ -394,13 +350,13 @@ function buildMenu(categories, products) {
       renderProducts(currentCategory, currentSearch);
     }
   });
-  // Busca com debounce
+
   const onSearch = debounce((e) => {
     currentSearch = e.target.value;
     renderProducts(currentCategory, currentSearch);
   }, 300);
   searchInput.addEventListener('input', onSearch);
-  // Evento para seletor de tamanho
+
   sizeSelector.addEventListener('click', (e) => {
     if (e.target && e.target.matches('.size-button')) {
       const btns = sizeSelector.querySelectorAll('.size-button');
@@ -410,10 +366,10 @@ function buildMenu(categories, products) {
       renderProducts(currentCategory, currentSearch);
     }
   });
-  // Define tamanho padrão como ativo
+
   const defaultSizeBtn = sizeSelector.querySelector('.size-button');
   if (defaultSizeBtn) defaultSizeBtn.classList.add('active');
-  // Render inicial
+
   renderProducts(currentCategory, currentSearch);
   return section;
 }
@@ -446,19 +402,16 @@ function buildDecorations(data) {
   const section = document.createElement('section');
   section.className = 'decorations';
   section.id = 'decorations';
-  // Título
   const title = document.createElement('h2');
   title.className = 'decorations-title';
   title.textContent = data.title || '';
   section.appendChild(title);
-  // Subtítulo
   if (data.subtitle) {
     const subtitle = document.createElement('p');
     subtitle.className = 'decorations-subtitle';
     subtitle.textContent = data.subtitle;
     section.appendChild(subtitle);
   }
-  // Grid de imagens
   const grid = document.createElement('div');
   grid.className = 'decorations-grid';
   data.items.forEach((imgPath) => {
@@ -503,10 +456,8 @@ function buildPolicies(data) {
   const section = document.createElement('section');
   section.className = 'policies';
   section.id = 'policies';
-  // Título e introdução
   const title = document.createElement('h2');
   title.className = 'policies-title';
-  // Usa introTitle se existir, senão fallback
   title.textContent = data.introTitle || 'Informações & Políticas';
   section.appendChild(title);
   if (data.introText) {
@@ -581,7 +532,6 @@ async function initSite() {
   const faq = await loadJSON('faq');
   const decorations = await loadJSON('decorations');
   const main = document.getElementById('main');
-  // Define ordem de seções
   const order = (theme && theme.sectionsOrder) || ['hero','about','menu','gallery','custom','policies','faq'];
   const enabled = (theme && theme.sectionsEnabled) || {};
   order.forEach((sectionName) => {
@@ -619,7 +569,6 @@ async function initSite() {
       main.appendChild(el);
     }
   });
-  // Footer texto
   const footerText = document.getElementById('footerText');
   if (footerText) {
     const brand = theme && theme.brandText ? theme.brandText : '';
@@ -628,5 +577,4 @@ async function initSite() {
   }
 }
 
-// Executa após carregar o DOM
 document.addEventListener('DOMContentLoaded', initSite);
