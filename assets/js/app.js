@@ -1,10 +1,26 @@
+<script>
 /*
  * Script principal responsável por carregar o conteúdo em JSON, aplicar o tema
- * e construir as seções do site dinamicamente. O objetivo é que todo o
- * conteúdo seja editável via CMS, sem necessidade de tocar neste código.
+ * e construir as seções do site dinamicamente. Todo o conteúdo é editável via CMS.
  */
 
-// Função utilitária para carregar arquivos JSON do diretório /content
+/* ===== PASSO CRÍTICO: remover SW e caches antigos ===== */
+async function killSWAndCaches() {
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    if (window.caches && caches.keys) {
+      const names = await caches.keys();
+      await Promise.all(names.map(n => caches.delete(n)));
+    }
+  } catch (e) {
+    console.warn('Aviso: não foi possível limpar SW/caches (seguindo mesmo assim).', e);
+  }
+}
+
+/* ===== Loader de JSON com bust de cache ===== */
 async function loadJSON(name) {
   const bust = (window.__BUILD_ID__ || Date.now()); // evita cache
   const url = `content/${name}.json?v=${bust}`;
@@ -24,37 +40,35 @@ async function loadJSON(name) {
   }
 }
 
-// Debounce simples para a busca
+/* ===== Util ===== */
 function debounce(func, delay) {
   let timer;
   return function (...args) {
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
+    timer = setTimeout(() => func.apply(this, args), delay);
   };
 }
 
-// Aplica as cores e textos definidos no tema (mapeando chaves novas/antigas)
+/* ===== Tema (mapeia chaves do CMS para CSS vars) ===== */
 function applyTheme(theme) {
   const t = { ...theme };
-  // Mapas de compatibilidade
-  if (t.primaryColor  && !t.primary) t.primary = t.primaryColor;
+  // Compatibilidade de chaves
+  if (t.primaryColor && !t.primary) t.primary = t.primaryColor;
   if (t.secondaryColor && !t.secondary) t.secondary = t.secondaryColor;
   if (t.backgroundColor && !t.bg) t.bg = t.backgroundColor;
   if (t.textColor && !t.text) t.text = t.textColor;
   if (t.cardColor && !t.card) t.card = t.cardColor;
   if (!t.card && theme.card) t.card = theme.card;
+  if (t.buttonColor && !t.button) t.button = t.buttonColor;
 
-  // CSS vars
   const root = document.documentElement;
-  if (t.primary) root.style.setProperty('--primary', t.primary);
+  if (t.primary)   root.style.setProperty('--primary', t.primary);
   if (t.secondary) root.style.setProperty('--secondary', t.secondary);
-  if (t.bg) root.style.setProperty('--bg', t.bg);
-  if (t.card) root.style.setProperty('--card', t.card);
-  if (t.text) root.style.setProperty('--text', t.text);
+  if (t.bg)        root.style.setProperty('--bg', t.bg);
+  if (t.card)      root.style.setProperty('--card', t.card);
+  if (t.text)      root.style.setProperty('--text', t.text);
+  if (t.button)    root.style.setProperty('--button', t.button);
 
-  // Conteúdos de header opcionais
   const brand = document.getElementById('brandText');
   const cta = document.getElementById('headerCta');
   if (brand && t.brandText) brand.textContent = t.brandText;
@@ -64,7 +78,7 @@ function applyTheme(theme) {
   }
 }
 
-// Constrói a seção Hero (opacidade em % e sem duplicação do overlay)
+/* ===== Hero ===== */
 function buildHero(data) {
   const section = document.createElement('section');
   section.className = 'hero';
@@ -88,7 +102,7 @@ function buildHero(data) {
     ? data.overlayOpacity
     : (typeof data?.opacity === 'number')
       ? data.opacity
-      : 60; // valor padrão em %
+      : 60;
 
   overlay.style.opacity = Math.max(0, Math.min(1, raw / 100));
   section.appendChild(overlay);
@@ -117,7 +131,7 @@ function buildHero(data) {
   return section;
 }
 
-// Constrói a seção Sobre
+/* ===== Sobre ===== */
 function buildAbout(data) {
   const section = document.createElement('section');
   section.className = 'about';
@@ -128,14 +142,15 @@ function buildAbout(data) {
   textWrapper.className = 'about-text-wrapper';
   const title = document.createElement('h2');
   title.className = 'about-title';
-  title.textContent = data.title || '';
+  title.textContent = data?.title || '';
   const text = document.createElement('p');
   text.className = 'about-text';
-  text.textContent = data.text || '';
+  text.textContent = data?.text || '';
   textWrapper.appendChild(title);
   textWrapper.appendChild(text);
+
   let imageEl = null;
-  if (data.image) {
+  if (data?.image) {
     const img = document.createElement('img');
     img.className = 'about-image';
     img.src = data.image;
@@ -146,46 +161,49 @@ function buildAbout(data) {
   grid.appendChild(textWrapper);
   if (imageEl) grid.appendChild(imageEl);
   section.appendChild(grid);
-  if (data.features && Array.isArray(data.features) && data.features.length) {
+
+  if (data?.features && Array.isArray(data.features) && data.features.length) {
     const featuresWrapper = document.createElement('div');
     featuresWrapper.className = 'features-row';
     data.features.forEach((item) => {
-      const itemEl = document.createElement('div');
-      itemEl.className = 'feature-item';
+      const el = document.createElement('div');
+      el.className = 'feature-item';
       if (item.icon && (item.icon.includes('/') || item.icon.includes('.'))) {
         const imgIcon = document.createElement('img');
         imgIcon.src = item.icon;
         imgIcon.alt = item.title || '';
         imgIcon.loading = 'lazy';
-        itemEl.appendChild(imgIcon);
+        el.appendChild(imgIcon);
       } else {
         const spanIcon = document.createElement('span');
         spanIcon.textContent = item.icon || '';
         spanIcon.className = 'icon-text';
-        itemEl.appendChild(spanIcon);
+        el.appendChild(spanIcon);
       }
       const ftTitle = document.createElement('h3');
       ftTitle.textContent = item.title || '';
       const ftText = document.createElement('p');
       ftText.textContent = item.text || '';
-      itemEl.appendChild(ftTitle);
-      itemEl.appendChild(ftText);
-      featuresWrapper.appendChild(itemEl);
+      el.appendChild(ftTitle);
+      el.appendChild(ftText);
+      featuresWrapper.appendChild(el);
     });
     section.appendChild(featuresWrapper);
   }
   return section;
 }
 
-// Constrói a seção de cardápio
+/* ===== Menu (produtos) ===== */
 function buildMenu(categories, products) {
   const section = document.createElement('section');
   section.className = 'menu-section';
   section.id = 'menu';
+
   const title = document.createElement('h2');
   title.className = 'menu-title';
   title.textContent = 'Escolha Seu Bolo Ideal';
   section.appendChild(title);
+
   const subtitle = document.createElement('p');
   subtitle.className = 'menu-subtitle';
   subtitle.textContent = 'Defina o sabor e o tamanho';
@@ -198,8 +216,7 @@ function buildMenu(categories, products) {
   sizeLabel.textContent = 'Tamanho:';
   sizeLabel.className = 'size-label';
   sizeSelector.appendChild(sizeLabel);
-  const sizes = ['P', 'M', 'G'];
-  sizes.forEach((sz) => {
+  ['P', 'M', 'G'].forEach((sz) => {
     const btn = document.createElement('button');
     btn.className = 'size-button';
     btn.textContent = sz;
@@ -238,7 +255,7 @@ function buildMenu(categories, products) {
   }
   section.appendChild(filterContainer);
 
-  // Info da categoria (escondido por padrão)
+  // Info da categoria (opcional/oculto)
   const infoContainer = document.createElement('div');
   infoContainer.className = 'category-info';
   const descPara = document.createElement('p');
@@ -249,10 +266,14 @@ function buildMenu(categories, products) {
   infoContainer.appendChild(sizesWrapper);
   section.appendChild(infoContainer);
 
-  // Grid de produtos
+  // Grid
   const grid = document.createElement('div');
   grid.className = 'product-grid';
   section.appendChild(grid);
+
+  let currentCategory = 'Todos';
+  let currentSearch = '';
+  let currentSize = 'P';
 
   const renderProducts = (catFilter, searchTerm) => {
     grid.innerHTML = '';
@@ -261,10 +282,10 @@ function buildMenu(categories, products) {
     infoContainer.style.display = 'none';
 
     const term = (searchTerm || '').toLowerCase();
-    const filtered = products.items.filter((item) => {
+    const filtered = (products?.items || []).filter((item) => {
       if (!item.active) return false;
       const matchesCategory = catFilter === 'Todos' || item.category === catFilter;
-      const textToSearch = `${item.name} ${item.description} ${item.tags ? item.tags.join(' ') : ''}`.toLowerCase();
+      const textToSearch = `${item.name} ${item.description} ${(item.tags || []).join(' ')}`.toLowerCase();
       const matchesSearch = term === '' || textToSearch.includes(term);
       return matchesCategory && matchesSearch;
     });
@@ -300,7 +321,7 @@ function buildMenu(categories, products) {
       }
       card.appendChild(imgWrap);
 
-      // Conteúdo
+      // Infos
       const info = document.createElement('div');
       info.className = 'product-info';
       const nameEl = document.createElement('h3');
@@ -308,24 +329,21 @@ function buildMenu(categories, products) {
       nameEl.textContent = product.name;
       const descEl = document.createElement('p');
       descEl.className = 'product-description';
-      descEl.textContent = product.description;
+      descEl.textContent = product.description || '';
 
-      // Tags
       const tagsEl = document.createElement('div');
       tagsEl.className = 'product-tags';
-      if (product.tags && product.tags.length) {
-        product.tags.forEach((tag) => {
-          const t = document.createElement('span');
-          t.className = 'product-tag';
-          t.textContent = tag;
-          tagsEl.appendChild(t);
-        });
-      }
+      (product.tags || []).forEach((tag) => {
+        const t = document.createElement('span');
+        t.className = 'product-tag';
+        t.textContent = tag;
+        tagsEl.appendChild(t);
+      });
 
       info.appendChild(nameEl);
       info.appendChild(descEl);
 
-      // Preço/porções conforme tamanho selecionado
+      // Preço/porções por tamanho
       const priceEl = document.createElement('div');
       priceEl.className = 'product-price';
       const servesEl = document.createElement('div');
@@ -348,14 +366,13 @@ function buildMenu(categories, products) {
         }
       }
 
-      priceEl.textContent = basePrice ? `${basePrice}` : '';
+      priceEl.textContent = basePrice || '';
       servesEl.textContent = serveInfo || '';
 
       info.appendChild(priceEl);
       info.appendChild(servesEl);
       info.appendChild(tagsEl);
 
-      // CTA
       if (product.cta) {
         const ctaEl = document.createElement('a');
         ctaEl.className = 'product-cta';
@@ -367,7 +384,6 @@ function buildMenu(categories, products) {
 
       card.appendChild(info);
 
-      // Badges
       if (product.bestseller) {
         const badge = document.createElement('div');
         badge.className = 'product-badge';
@@ -384,24 +400,16 @@ function buildMenu(categories, products) {
     });
   };
 
-  function renderCategoryInfo(catFilter) {
-    // mantido oculto por padrão nesta versão
+  function renderCategoryInfo() {
     descPara.textContent = '';
     sizesWrapper.innerHTML = '';
     infoContainer.style.display = 'none';
-    return;
   }
-
-  // Estado
-  let currentCategory = 'Todos';
-  let currentSearch = '';
-  let currentSize = 'P';
 
   // Eventos
   filterContainer.addEventListener('click', (e) => {
     if (e.target && e.target.matches('.category-button')) {
-      const buttons = filterContainer.querySelectorAll('.category-button');
-      buttons.forEach((b) => b.classList.remove('active'));
+      filterContainer.querySelectorAll('.category-button').forEach((b) => b.classList.remove('active'));
       e.target.classList.add('active');
       currentCategory = e.target.dataset.category;
       renderProducts(currentCategory, currentSearch);
@@ -416,24 +424,22 @@ function buildMenu(categories, products) {
 
   sizeSelector.addEventListener('click', (e) => {
     if (e.target && e.target.matches('.size-button')) {
-      const btns = sizeSelector.querySelectorAll('.size-button');
-      btns.forEach((b) => b.classList.remove('active'));
+      sizeSelector.querySelectorAll('.size-button').forEach((b) => b.classList.remove('active'));
       e.target.classList.add('active');
       currentSize = e.target.dataset.size;
       renderProducts(currentCategory, currentSearch);
     }
   });
 
-  // Tamanho padrão ativo
+  // Tamanho padrão ativo + render inicial
   const defaultSizeBtn = sizeSelector.querySelector('.size-button');
   if (defaultSizeBtn) defaultSizeBtn.classList.add('active');
-
-  // Render inicial
   renderProducts(currentCategory, currentSearch);
+
   return section;
 }
 
-// Constrói a galeria
+/* ===== Galeria ===== */
 function buildGallery(data) {
   if (!data || !data.items || data.items.length === 0) return null;
   const section = document.createElement('section');
@@ -455,7 +461,7 @@ function buildGallery(data) {
   return section;
 }
 
-// Constrói a seção de decorações (escolha sua decoração)
+/* ===== Decorações ===== */
 function buildDecorations(data) {
   if (!data || !data.items || data.items.length === 0) return null;
   const section = document.createElement('section');
@@ -484,7 +490,7 @@ function buildDecorations(data) {
   return section;
 }
 
-// Constrói o bloco sob medida
+/* ===== Sob medida ===== */
 function buildCustom(data) {
   if (!data) return null;
   const section = document.createElement('section');
@@ -509,7 +515,7 @@ function buildCustom(data) {
   return section;
 }
 
-// Constrói a seção de políticas/informações
+/* ===== Políticas ===== */
 function buildPolicies(data) {
   if (!data || !data.items || !data.items.length) return null;
   const section = document.createElement('section');
@@ -533,13 +539,11 @@ function buildPolicies(data) {
     const h4 = document.createElement('h4');
     h4.textContent = item.title || '';
     const ul = document.createElement('ul');
-    if (item.items && item.items.length) {
-      item.items.forEach((li) => {
-        const liEl = document.createElement('li');
-        liEl.textContent = li;
-        ul.appendChild(liEl);
-      });
-    }
+    (item.items || []).forEach((li) => {
+      const liEl = document.createElement('li');
+      liEl.textContent = li;
+      ul.appendChild(liEl);
+    });
     card.appendChild(h4);
     card.appendChild(ul);
     grid.appendChild(card);
@@ -548,7 +552,7 @@ function buildPolicies(data) {
   return section;
 }
 
-// Constrói a seção FAQ
+/* ===== FAQ ===== */
 function buildFAQ(data) {
   if (!data || !data.items || !data.items.length) return null;
   const section = document.createElement('section');
@@ -577,23 +581,27 @@ function buildFAQ(data) {
   return section;
 }
 
-// Inicialização: carrega o conteúdo e monta as seções
+/* ===== Inicialização ===== */
 async function initSite() {
-  const theme = await loadJSON('theme');
+  // 1) mata SW/caches antigos (importante para refletir as alterações do CMS)
+  await killSWAndCaches();
+
+  // 2) carrega conteúdo
+  const theme       = await loadJSON('theme');
   if (theme) applyTheme(theme);
-  const hero = await loadJSON('hero');
-  const about = await loadJSON('about');
-  const categories = await loadJSON('categories');
-  const products = await loadJSON('products');
-  const gallery = await loadJSON('gallery');
-  const custom = await loadJSON('custom');
-  const policies = await loadJSON('policies');
-  const faq = await loadJSON('faq');
+
+  const hero        = await loadJSON('hero');
+  const about       = await loadJSON('about');
+  const categories  = await loadJSON('categories');
+  const products    = await loadJSON('products');
+  const gallery     = await loadJSON('gallery');
+  const custom      = await loadJSON('custom');
+  const policies    = await loadJSON('policies');
+  const faq         = await loadJSON('faq');
   const decorations = await loadJSON('decorations');
 
   const main = document.getElementById('main');
 
-  // Ordem/ligar-desligar por tema (fallback padrão)
   const order = (theme && theme.sectionsOrder) || ['hero','about','menu','gallery','custom','policies','faq'];
   const enabled = (theme && theme.sectionsEnabled) || {};
 
@@ -614,7 +622,6 @@ async function initSite() {
     if (el) main.appendChild(el);
   });
 
-  // Footer
   const footerText = document.getElementById('footerText');
   if (footerText) {
     const brand = theme && theme.brandText ? theme.brandText : '';
@@ -624,3 +631,4 @@ async function initSite() {
 }
 
 document.addEventListener('DOMContentLoaded', initSite);
+</script>
