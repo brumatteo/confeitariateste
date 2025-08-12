@@ -1,10 +1,3 @@
-
-/*
- * Script principal responsável por carregar o conteúdo em JSON, aplicar o tema
- * e construir as seções do site dinamicamente. Todo o conteúdo é editável via CMS.
- */
-
-/* ===== PASSO CRÍTICO: remover SW e caches antigos ===== */
 async function killSWAndCaches() {
   try {
     if ('serviceWorker' in navigator) {
@@ -20,27 +13,20 @@ async function killSWAndCaches() {
   }
 }
 
-/* ===== Loader de JSON com bust de cache ===== */
 async function loadJSON(name) {
-  const bust = (window.__BUILD_ID__ || Date.now()); // evita cache
+  const bust = (window.__BUILD_ID__ || Date.now());
   const url = `content/${name}.json?v=${bust}`;
   try {
-    const response = await fetch(url, {
-      cache: 'no-store',
-      headers: { 'Cache-Control': 'no-cache' }
-    });
+    const response = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
     if (!response.ok) throw new Error(`Não foi possível carregar ${name}`);
     return await response.json();
   } catch (e) {
     console.warn(`Falha ao carregar ${name}.json, usando dados padrão se disponíveis.`, e);
-    if (window.defaultContent && window.defaultContent[name]) {
-      return window.defaultContent[name];
-    }
+    if (window.defaultContent && window.defaultContent[name]) return window.defaultContent[name];
     return null;
   }
 }
 
-/* ===== Util ===== */
 function debounce(func, delay) {
   let timer;
   return function (...args) {
@@ -49,10 +35,8 @@ function debounce(func, delay) {
   };
 }
 
-/* ===== Tema (mapeia chaves do CMS para CSS vars) ===== */
 function applyTheme(theme) {
   const t = { ...theme };
-  // Compatibilidade de chaves
   if (t.primaryColor && !t.primary) t.primary = t.primaryColor;
   if (t.secondaryColor && !t.secondary) t.secondary = t.secondaryColor;
   if (t.backgroundColor && !t.bg) t.bg = t.backgroundColor;
@@ -76,9 +60,28 @@ function applyTheme(theme) {
     cta.textContent = t.headerCta.label || '';
     cta.href = t.headerCta.href || '#';
   }
+
+  if (t.button) {
+    const forceBtnStyles = () => {
+      document.querySelectorAll('.header-cta, .product-cta').forEach(el => {
+        el.style.background = `var(--button)`;
+        el.style.borderColor = `var(--button)`;
+        el.style.color = '#fff';
+      });
+      document.querySelectorAll('.size-button.active, .category-button.active').forEach(el => {
+        el.style.background = `var(--button)`;
+        el.style.borderColor = `var(--button)`;
+        el.style.color = '#fff';
+      });
+      document.querySelectorAll('.size-button, .category-button').forEach(el => {
+        el.style.borderColor = `var(--button)`;
+      });
+    };
+    forceBtnStyles();
+    setTimeout(forceBtnStyles, 0);
+  }
 }
 
-/* ===== Hero ===== */
 function buildHero(data) {
   const section = document.createElement('section');
   section.className = 'hero';
@@ -131,7 +134,6 @@ function buildHero(data) {
   return section;
 }
 
-/* ===== Sobre ===== */
 function buildAbout(data) {
   const section = document.createElement('section');
   section.className = 'about';
@@ -193,7 +195,6 @@ function buildAbout(data) {
   return section;
 }
 
-/* ===== Menu (produtos) ===== */
 function buildMenu(categories, products) {
   const section = document.createElement('section');
   section.className = 'menu-section';
@@ -209,7 +210,6 @@ function buildMenu(categories, products) {
   subtitle.textContent = 'Defina o sabor e o tamanho';
   section.appendChild(subtitle);
 
-  // Seletor de tamanho
   const sizeSelector = document.createElement('div');
   sizeSelector.className = 'size-selector';
   const sizeLabel = document.createElement('span');
@@ -225,7 +225,6 @@ function buildMenu(categories, products) {
   });
   section.appendChild(sizeSelector);
 
-  // Busca
   const searchContainer = document.createElement('div');
   searchContainer.className = 'search-container';
   const searchInput = document.createElement('input');
@@ -236,7 +235,6 @@ function buildMenu(categories, products) {
   searchContainer.appendChild(searchInput);
   section.appendChild(searchContainer);
 
-  // Filtros de categoria
   const filterContainer = document.createElement('div');
   filterContainer.className = 'category-filters';
   const allBtn = document.createElement('button');
@@ -255,7 +253,6 @@ function buildMenu(categories, products) {
   }
   section.appendChild(filterContainer);
 
-  // Info da categoria (opcional/oculto)
   const infoContainer = document.createElement('div');
   infoContainer.className = 'category-info';
   const descPara = document.createElement('p');
@@ -266,7 +263,6 @@ function buildMenu(categories, products) {
   infoContainer.appendChild(sizesWrapper);
   section.appendChild(infoContainer);
 
-  // Grid
   const grid = document.createElement('div');
   grid.className = 'product-grid';
   section.appendChild(grid);
@@ -302,7 +298,6 @@ function buildMenu(categories, products) {
       const card = document.createElement('div');
       card.className = 'product-card';
 
-      // Imagem
       const imgWrap = document.createElement('div');
       imgWrap.className = 'product-image';
       if (product.image) {
@@ -321,7 +316,6 @@ function buildMenu(categories, products) {
       }
       card.appendChild(imgWrap);
 
-      // Infos
       const info = document.createElement('div');
       info.className = 'product-info';
       const nameEl = document.createElement('h3');
@@ -343,7 +337,6 @@ function buildMenu(categories, products) {
       info.appendChild(nameEl);
       info.appendChild(descEl);
 
-      // Preço/porções por tamanho
       const priceEl = document.createElement('div');
       priceEl.className = 'product-price';
       const servesEl = document.createElement('div');
@@ -406,7 +399,6 @@ function buildMenu(categories, products) {
     infoContainer.style.display = 'none';
   }
 
-  // Eventos
   filterContainer.addEventListener('click', (e) => {
     if (e.target && e.target.matches('.category-button')) {
       filterContainer.querySelectorAll('.category-button').forEach((b) => b.classList.remove('active'));
@@ -431,7 +423,6 @@ function buildMenu(categories, products) {
     }
   });
 
-  // Tamanho padrão ativo + render inicial
   const defaultSizeBtn = sizeSelector.querySelector('.size-button');
   if (defaultSizeBtn) defaultSizeBtn.classList.add('active');
   renderProducts(currentCategory, currentSearch);
@@ -439,7 +430,6 @@ function buildMenu(categories, products) {
   return section;
 }
 
-/* ===== Galeria ===== */
 function buildGallery(data) {
   if (!data || !data.items || data.items.length === 0) return null;
   const section = document.createElement('section');
@@ -461,7 +451,6 @@ function buildGallery(data) {
   return section;
 }
 
-/* ===== Decorações ===== */
 function buildDecorations(data) {
   if (!data || !data.items || data.items.length === 0) return null;
   const section = document.createElement('section');
@@ -490,7 +479,6 @@ function buildDecorations(data) {
   return section;
 }
 
-/* ===== Sob medida ===== */
 function buildCustom(data) {
   if (!data) return null;
   const section = document.createElement('section');
@@ -515,7 +503,6 @@ function buildCustom(data) {
   return section;
 }
 
-/* ===== Políticas ===== */
 function buildPolicies(data) {
   if (!data || !data.items || !data.items.length) return null;
   const section = document.createElement('section');
@@ -552,7 +539,6 @@ function buildPolicies(data) {
   return section;
 }
 
-/* ===== FAQ ===== */
 function buildFAQ(data) {
   if (!data || !data.items || !data.items.length) return null;
   const section = document.createElement('section');
@@ -581,12 +567,9 @@ function buildFAQ(data) {
   return section;
 }
 
-/* ===== Inicialização ===== */
 async function initSite() {
-  // 1) mata SW/caches antigos (importante para refletir as alterações do CMS)
   await killSWAndCaches();
 
-  // 2) carrega conteúdo
   const theme       = await loadJSON('theme');
   if (theme) applyTheme(theme);
 
