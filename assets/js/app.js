@@ -52,6 +52,7 @@ function applyTheme(theme) {
   if (t.cardColor && !t.card) t.card = t.cardColor;
   if (!t.card && theme.card) t.card = theme.card;
   if (t.buttonColor && !t.button) t.button = t.buttonColor;
+  if (!t.button && (t.primary || t.primaryColor)) t.button = t.primary || t.primaryColor;
 
   const root = document.documentElement;
   if (t.primary)   root.style.setProperty('--primary', t.primary);
