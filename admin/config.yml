@@ -83,26 +83,49 @@ collections:
 
   # -------------------- BANNER (CAPA) --------------------
   - name: hero
-  label: "Banner (capa)"
-  delete: false
-  files:
-    - file: "content/hero.json"
-      name: hero
-      label: "Banner (capa)"
-      format: json
-      fields:
-        - { label: "Título grande do banner", name: title, widget: string, default: "Sua Celebração, Nossa Assinatura" }
-        - { label: "Subtítulo (texto menor)", name: subtitle, widget: text, required: false, default: "Bolos decorados sob medida para momentos que merecem ser lembrados." }
-        - { label: "Imagem de fundo do banner (opcional)", name: image, widget: image, required: false, default: "images/hero.jpg" }
-        - { label: "Opacidade do escurecimento (%)", name: overlayOpacity, widget: number, min: 0, max: 100, step: 1, required: false, default: 60 }
-        - label: "Botão do banner"
-          name: cta
-          widget: object
-          collapsed: false
-          fields:
-            - { label: "Texto do botão", name: label, widget: string, default: "Ver Cardápio" }
-            - { label: "Para onde o botão leva", name: href, widget: string, default: "#menu" }
-
+    label: "Banner (capa)"
+    delete: false
+    files:
+      - file: "content/hero.json"
+        name: hero
+        label: "Banner (capa)"
+        format: json
+        fields:
+          - label: "Título grande do banner"
+            name: title
+            widget: string
+            default: "Sua Celebração, Nossa Assinatura"
+          - label: "Subtítulo (texto menor)"
+            name: subtitle
+            widget: text
+            required: false
+            default: "Bolos decorados sob medida para momentos que merecem ser lembrados."
+          - label: "Imagem de fundo do banner (opcional)"
+            name: image
+            widget: image
+            required: false
+            default: "images/hero.jpg"
+          - label: "Opacidade do escurecimento (%)"
+            name: overlayOpacity
+            widget: number
+            min: 0
+            max: 100
+            step: 1
+            required: false
+            default: 60
+          - label: "Botão do banner"
+            name: cta
+            widget: object
+            collapsed: false
+            fields:
+              - label: "Texto do botão"
+                name: label
+                widget: string
+                default: "Ver Cardápio"
+              - label: "Para onde o botão leva"
+                name: href
+                widget: string
+                default: "#menu"
 
   # -------------------- SOBRE --------------------
   - name: about
