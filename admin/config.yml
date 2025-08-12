@@ -230,24 +230,27 @@ collections:
                 widget: image
                 required: false
               - label: "Tamanhos (opcional)"
-                name: sizes
+                name: sizeTable
                 widget: list
                 required: false
                 label_singular: "tamanho"
                 collapsed: false
-                summary: "{{fields.label}} — {{fields.price}}"
+                summary: "{{fields.size}} — {{fields.price}}"
                 fields:
-                  - label: "Nome (P/M/G…)"
-                    name: label
+                  - label: "Tamanho (ex.: P 15cm)"
+                    name: size
                     widget: string
                   - label: "Preço"
                     name: price
                     widget: string
+                  - label: "Rende (opcional, ex.: 20 fatias)"
+                    name: serves
+                    widget: string
                     required: false
                 default:
-                  - { label: "P", price: "R$ 250,00" }
-                  - { label: "M", price: "R$ 300,00" }
-                  - { label: "G", price: "R$ 380,00" }
+                  - { size: "P 15cm", price: "R$ 250,00", serves: "" }
+                  - { size: "M 17cm", price: "R$ 300,00", serves: "" }
+                  - { size: "G 20cm", price: "R$ 380,00", serves: "" }
               - label: "Etiqueta (opcional)"
                 name: badge
                 widget: select
@@ -343,5 +346,6 @@ collections:
               - label: "Resposta"
                 name: answer
                 widget: text
+
 
 
