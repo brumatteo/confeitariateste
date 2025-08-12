@@ -591,4 +591,3 @@ async function initSite() {
 }
 
 document.addEventListener('DOMContentLoaded', initSite);
-
