@@ -45,30 +45,43 @@ function debounce(func, delay) {
 
 function applyTheme(theme) {
   const t = { ...theme };
-  if (t.primaryColor && !t.primary) t.primary = t.primaryColor;
+
+  // Mapear chaves do CMS
+  if (t.primaryColor   && !t.primary)   t.primary   = t.primaryColor;
   if (t.secondaryColor && !t.secondary) t.secondary = t.secondaryColor;
-  if (t.backgroundColor && !t.bg) t.bg = t.backgroundColor;
-  if (t.textColor && !t.text) t.text = t.textColor;
-  if (t.cardColor && !t.card) t.card = t.cardColor;
-  if (!t.card && theme.card) t.card = theme.card;
-  if (t.buttonColor && !t.button) t.button = t.buttonColor;
-  if (!t.button && (t.primary || t.primaryColor)) t.button = t.primary || t.primaryColor;
+  if (t.backgroundColor&& !t.bg)        t.bg        = t.backgroundColor;
+  if (t.textColor      && !t.text)      t.text      = t.textColor;
+  if (t.cardColor      && !t.card)      t.card      = t.cardColor;
+  if (!t.card && theme.card)            t.card      = theme.card;
 
+  // Cor do botão vinda do CMS; se não houver, cai para a primária
+  if (!t.button && t.buttonColor)       t.button    = t.buttonColor;
+  if (!t.button)                         t.button    = t.primary || t.primaryColor;
+
+  // CSS vars
   const root = document.documentElement;
-  if (t.primary)   root.style.setProperty('--primary', t.primary);
+  if (t.primary)   root.style.setProperty('--primary',   t.primary);
   if (t.secondary) root.style.setProperty('--secondary', t.secondary);
-  if (t.bg)        root.style.setProperty('--bg', t.bg);
-  if (t.card)      root.style.setProperty('--card', t.card);
-  if (t.text)      root.style.setProperty('--text', t.text);
-  if (t.button)    root.style.setProperty('--button', t.button);
+  if (t.bg)        root.style.setProperty('--bg',        t.bg);
+  if (t.card)      root.style.setProperty('--card',      t.card);
+  if (t.text)      root.style.setProperty('--text',      t.text);
+  if (t.button)    root.style.setProperty('--button',    t.button);
 
+  // Textos do header (opcional)
   const brand = document.getElementById('brandText');
-  const cta = document.getElementById('headerCta');
+  const cta   = document.getElementById('headerCta');
   if (brand && t.brandText) brand.textContent = t.brandText;
   if (cta && t.headerCta) {
     cta.textContent = t.headerCta.label || '';
-    cta.href = t.headerCta.href || '#';
+    cta.href       = t.headerCta.href  || '#';
   }
+
+  // Força os estilos dos botões após setar as vars
+  if (typeof forceBtnStyles === 'function') {
+    forceBtnStyles();
+    setTimeout(forceBtnStyles, 0);
+  }
+}
 
   const forceBtnStyles = () => {
     document.querySelectorAll('.header-cta, .product-cta').forEach(el => {
