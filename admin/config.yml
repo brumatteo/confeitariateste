@@ -245,9 +245,9 @@ collections:
                     widget: string
                     required: false
                 default:
-                  - { label: "P", price: "" }
-                  - { label: "M", price: "" }
-                  - { label: "G", price: "" }
+                  - { label: "P", price: "R$ 250,00" }
+                  - { label: "M", price: "R$ 300,00" }
+                  - { label: "G", price: "R$ 380,00" }
               - label: "Etiqueta (opcional)"
                 name: badge
                 widget: select
@@ -343,4 +343,5 @@ collections:
               - label: "Resposta"
                 name: answer
                 widget: text
+
 
