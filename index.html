@@ -6,11 +6,50 @@
   <title>Cardápio Bolo à Vista</title>
   <meta name="description" content="Cardápio de bolos decorados, feitos sob medida e personalizados.">
 
+  <!-- Evita cache agressivo do HTML (ajuda nas trocas de build) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600;1,9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Styles -->
   <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- Overrides mínimos para usar as cores vindas do CMS -->
+  <style id="cms-theme-overrides">
+    /* Defaults de segurança (são substituídos pelo theme.json via app.js) */
+    :root{
+      --primary:#58410d;
+      --secondary:#7a5c4b;
+      --bg:#f8f6f3;
+      --card:#ffffff;
+      --text:#5a4b42;
+      --button:#d99a9a; /* esta é a que vem do CMS: theme.buttonColor */
+    }
+
+    /* Garantir que botões usem a --button */
+    .header-cta,
+    .product-cta,
+    .size-button.active,
+    .category-button.active {
+      background: var(--button) !important;
+      border-color: var(--button) !important;
+      color: #fff !important;
+    }
+
+    /* Bordas/estados inativos ainda alinhados com a cor do botão */
+    .size-button,
+    .category-button {
+      border-color: var(--button) !important;
+    }
+
+    .header-cta:hover,
+    .product-cta:hover {
+      filter: brightness(0.95);
+    }
+  </style>
 </head>
 <body>
   <!-- Header -->
